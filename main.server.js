@@ -2,6 +2,10 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const { connectToMongo } = require("./config/db");
+const peopleRoutes = require("./modules/people/routes");
+const usersRoutes = require("./modules/users/routes");
+const organizationsRoutes = require("./modules/organizations/routes");
+const modalitiesRoutes = require("./modules/modalities/routes");
 
 let mongoOk = false;
 
@@ -11,6 +15,12 @@ function mainServer() {
 
   app.use(cors());
   app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
+
+  app.use("/api/people", peopleRoutes);
+  app.use("/api/users", usersRoutes);
+  app.use("/api/organizations", organizationsRoutes);
+  app.use("/api/modalities", modalitiesRoutes);
 
   // Conectar a MongoDB al iniciar el servidor.
   (async () => {
@@ -32,7 +42,12 @@ function mainServer() {
   // Health endpoint.
   app.get("/", (req, res) => {
     const estadoConexion = mongoose.connection.readyState;
-    const estados = { 0: "Desconectado", 1: "Conectado", 2: "Conectando", 3: "Desconectando" };
+    const estados = {
+      0: "Desconectado",
+      1: "Conectado",
+      2: "Conectando",
+      3: "Desconectando",
+    };
 
     if (mongoOk && estadoConexion === 1) {
       res.status(200).json({
