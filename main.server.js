@@ -3,6 +3,12 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const { connectToMongo } = require("./config/db");
 
+// Middlewares
+const { verifyToken } = require("./main.middlewares");
+
+// Cargar rutas de módulos.
+const AuthRouter = require("./modules/auth/routes");
+
 let mongoOk = false;
 
 function mainServer() {
@@ -32,7 +38,12 @@ function mainServer() {
   // Health endpoint.
   app.get("/", (req, res) => {
     const estadoConexion = mongoose.connection.readyState;
-    const estados = { 0: "Desconectado", 1: "Conectado", 2: "Conectando", 3: "Desconectando" };
+    const estados = {
+      0: "Desconectado",
+      1: "Conectado",
+      2: "Conectando",
+      3: "Desconectando",
+    };
 
     if (mongoOk && estadoConexion === 1) {
       res.status(200).json({
@@ -66,6 +77,12 @@ function mainServer() {
       });
     }
   });
+
+  // Rutas de autenticación (abiertas).
+  app.use("/auth", AuthRouter);
+
+  // No permitir usuarios no autorizados a otras rutas.
+  app.use(verifyToken);
 
   app.listen(HTTP_PORT, () => {
     console.log(`Server HTTP http://localhost:${HTTP_PORT}`);
