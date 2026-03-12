@@ -34,3 +34,6 @@ yarn-error.log*
 # MongoDB volumes
 mongodb_data/
 mongodb_config/
+
+# Temporary files until auth
+/session.json
