@@ -22,6 +22,22 @@ El usuario Visor solo debe poder acceder a un listado de la entidad modalities.
 
 El servidor backend tiene que ser quien controle por roles y no permitir llevar adelante operaciones que no correspondan con el rol del usuario que se encuentre autenticado (payload JWT).
 
+Ejemplo de body para `POST /auth/bootstrap-admin`:
+
+```json
+{
+  "person": {
+    "document": "12345678",
+    "name_01": "Maria",
+    "surname_01": "Mar",
+    "birth_date": "1990-01-01"
+  },
+  "username": "admiMaria",
+  "password": "admin123",
+  "email": "admin@gmail.com"
+}
+```
+
 Las operaciones de CRUD deben ser cuidadas, validadas y parseadas en sus tipos de datos en caso de ser necesario.
 
 Desde el contexto de Frontend sobre las operaciones CRUD debe validarse la información antes de ser enviada al servidor Backend más allá de que el mismo cuente con sus propios validadores (prevenir comunicación que se sepa con antelación que su destino sea un error).
