@@ -2,16 +2,16 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const { connectToMongo } = require("./config/db");
-const peopleRoutes = require("./modules/people/routes");
-const usersRoutes = require("./modules/users/routes");
-const organizationsRoutes = require("./modules/organizations/routes");
-const modalitiesRoutes = require("./modules/modalities/routes");
 
 // Middlewares
 const { verifyToken } = require("./main.middlewares");
 
 // Cargar rutas de módulos.
 const AuthRouter = require("./modules/auth/routes");
+const peopleRoutes = require("./modules/people/routes");
+const usersRoutes = require("./modules/users/routes");
+const organizationsRoutes = require("./modules/organizations/routes");
+const modalitiesRoutes = require("./modules/modalities/routes");
 
 let mongoOk = false;
 
@@ -89,6 +89,7 @@ function mainServer() {
   // No permitir usuarios no autorizados a otras rutas.
   app.use(verifyToken);
 
+  // Rutas de módulos
   app.use("/api/people", peopleRoutes);
   app.use("/api/users", usersRoutes);
   app.use("/api/organizations", organizationsRoutes);
