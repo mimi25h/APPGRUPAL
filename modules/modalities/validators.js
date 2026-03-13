@@ -1,25 +1,64 @@
-const { body } = require("express-validator");
+const { body, param } = require("express-validator");
 
-const createModalityValidator = [
-  body("code_meaning")
+const modalityIdValidator = [
+  param("id").isMongoId().withMessage("id debe ser un ObjectId valido"),
+];
+
+function codeMeaningValidator(isUpdate = false) {
+  const validator = body("code_meaning");
+  if (isUpdate) {
+    validator.optional();
+  } else {
+    validator.notEmpty().withMessage("code_meaning es obligatorio");
+  }
+
+  return validator
     .trim()
-    .notEmpty()
-    .withMessage("code_meaning es obligatorio")
     .isLength({ min: 2, max: 100 })
-    .withMessage("code_meaning debe tener entre 2 y 100 caracteres"),
+    .withMessage("code_meaning debe tener entre 2 y 100 caracteres");
+}
 
-  body("code_value")
+function codeValueValidator(isUpdate = false) {
+  const validator = body("code_value");
+  if (isUpdate) {
+    validator.optional();
+  } else {
+    validator.notEmpty().withMessage("code_value es obligatorio");
+  }
+
+  return validator
     .trim()
-    .notEmpty()
-    .withMessage("code_value es obligatorio")
     .isLength({ min: 1, max: 30 })
-    .withMessage("code_value debe tener entre 1 y 30 caracteres"),
+    .withMessage("code_value debe tener entre 1 y 30 caracteres");
+}
 
-  body("status")
+function statusValidator() {
+  return body("status")
     .optional()
     .isBoolean()
     .withMessage("status debe ser boolean")
-    .toBoolean(),
+    .toBoolean();
+}
+
+function buildModalityValidators(isUpdate = false) {
+  return [
+    codeMeaningValidator(isUpdate),
+    codeValueValidator(isUpdate),
+    statusValidator(),
+  ];
+}
+
+const createModalityValidator = buildModalityValidators();
+
+const updateModalityValidator = [
+  body()
+    .custom((value) => Object.keys(value || {}).length > 0)
+    .withMessage("Debe enviar al menos un campo para actualizar"),
+  ...buildModalityValidators(true),
 ];
 
-module.exports = { createModalityValidator };
+module.exports = {
+  createModalityValidator,
+  modalityIdValidator,
+  updateModalityValidator,
+};

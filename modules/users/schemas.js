@@ -10,7 +10,11 @@ const usersSchema = new mongoose.Schema(
     username: { type: String, required: true },
     password: { type: String },
     email: { type: String, required: true },
-    role: { type: Number },
+    role: {
+      type: Number,
+      required: true,
+      enum: [1, 2],
+    },
     settings: { language: { type: String }, theme: { type: String } },
     status: { type: Boolean, default: true },
   },

@@ -1,17 +1,29 @@
 const express = require("express");
-const People = require("./schemas");
-const { createPeopleValidator } = require("./validators");
-const { validateRequest } = require("../../main.middlewares");
+const createPeople = require("./handlers/create");
+const readPeople = require("./handlers/read");
+const updatePeople = require("./handlers/update");
+const deletePeople = require("./handlers/delete");
+const {
+  createPeopleValidator,
+  peopleIdValidator,
+  updatePeopleValidator,
+} = require("./validators");
+const { checkIsAdmin, validateRequest } = require("../../main.middlewares");
 
 const router = express.Router();
 
-router.post("/", createPeopleValidator, validateRequest, async (req, res) => {
-  try {
-    const created = await People.create(req.body);
-    res.status(201).json({ ok: true, data: created });
-  } catch (error) {
-    res.status(500).json({ ok: false, message: error.message });
-  }
-});
+router.use(checkIsAdmin);
+
+router.get("/", readPeople);
+router.get("/:id", peopleIdValidator, validateRequest, readPeople);
+router.post("/", createPeopleValidator, validateRequest, createPeople);
+router.put(
+  "/:id",
+  peopleIdValidator,
+  updatePeopleValidator,
+  validateRequest,
+  updatePeople,
+);
+router.delete("/:id", peopleIdValidator, validateRequest, deletePeople);
 
 module.exports = router;

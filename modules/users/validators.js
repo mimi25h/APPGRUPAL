@@ -1,62 +1,137 @@
-const { body } = require("express-validator");
+const { body, param } = require("express-validator");
 
-const createUserValidator = [
-  body("fk_person")
-    .notEmpty()
-    .withMessage("fk_person es obligatorio")
+const userIdValidator = [
+  param("id").isMongoId().withMessage("id debe ser un ObjectId valido"),
+];
+
+function fkPersonValidator(isUpdate = false) {
+  const validator = body("fk_person");
+  if (isUpdate) {
+    validator.optional();
+  } else {
+    validator.notEmpty().withMessage("fk_person es obligatorio");
+  }
+
+  return validator
     .isMongoId()
-    .withMessage("fk_person debe ser un ObjectId valido"),
+    .withMessage("fk_person debe ser un ObjectId valido");
+}
 
-  body("username")
+function usernameValidator(isUpdate = false) {
+  const validator = body("username");
+  if (isUpdate) {
+    validator.optional();
+  } else {
+    validator.notEmpty().withMessage("username es obligatorio");
+  }
+
+  return validator
     .trim()
-    .notEmpty()
-    .withMessage("username es obligatorio")
     .isLength({ min: 3, max: 30 })
-    .withMessage("username debe tener entre 3 y 30 caracteres"),
+    .withMessage("username debe tener entre 3 y 30 caracteres");
+}
 
-  body("password")
+function passwordValidator(isUpdate = false) {
+  const validator = body("password");
+  if (isUpdate) {
+    validator.optional();
+  } else {
+    validator.notEmpty().withMessage("password es obligatorio");
+  }
+
+  return validator
     .trim()
-    .notEmpty()
-    .withMessage("password es obligatorio")
     .isLength({ min: 6 })
-    .withMessage("password debe tener al menos 6 caracteres"),
+    .withMessage("password debe tener al menos 6 caracteres");
+}
 
-  body("email")
+function emailValidator(isUpdate = false) {
+  const validator = body("email");
+  if (isUpdate) {
+    validator.optional();
+  } else {
+    validator.notEmpty().withMessage("email es obligatorio");
+  }
+
+  return validator
     .trim()
-    .notEmpty()
-    .withMessage("email es obligatorio")
     .isEmail()
     .withMessage("email no es valido")
-    .normalizeEmail(),
+    .normalizeEmail();
+}
 
-  body("role")
-    .trim()
+function roleValidator(isUpdate = false) {
+  const validator = body("role");
+  if (isUpdate) {
+    validator.optional();
+  } else {
+    validator.notEmpty().withMessage("role es obligatorio");
+  }
+
+  return validator
     .isInt()
     .withMessage("role debe ser un numero entero")
-    .toInt(),
+    .isIn([1, 2])
+    .withMessage("role debe ser 1 (Administrador) o 2 (Visor)")
+    .toInt();
+}
 
-  body("settings")
+function settingsValidator() {
+  return body("settings")
     .optional()
     .isObject()
-    .withMessage("settings debe ser un objeto"),
+    .withMessage("settings debe ser un objeto");
+}
 
-  body("settings.language")
+function settingsLanguageValidator() {
+  return body("settings.language")
     .optional({ values: "falsy" })
     .trim()
     .isLength({ min: 2, max: 20 })
-    .withMessage("settings.language debe tener entre 2 y 20 caracteres"),
+    .withMessage("settings.language debe tener entre 2 y 20 caracteres");
+}
 
-  body("settings.theme")
+function settingsThemeValidator() {
+  return body("settings.theme")
     .optional({ values: "falsy" })
     .trim()
     .isLength({ min: 3, max: 20 })
-    .withMessage("settings.theme debe tener entre 3 y 20 caracteres"),
+    .withMessage("settings.theme debe tener entre 3 y 20 caracteres");
+}
 
-  body("status")
+function statusValidator() {
+  return body("status")
     .optional()
     .isBoolean()
     .withMessage("status debe ser boolean")
-    .toBoolean(),
+    .toBoolean();
+}
+
+function buildUserValidators(isUpdate = false) {
+  return [
+    fkPersonValidator(isUpdate),
+    usernameValidator(isUpdate),
+    passwordValidator(isUpdate),
+    emailValidator(isUpdate),
+    roleValidator(isUpdate),
+    settingsValidator(),
+    settingsLanguageValidator(),
+    settingsThemeValidator(),
+    statusValidator(),
+  ];
+}
+
+const createUserValidator = buildUserValidators();
+
+const updateUserValidator = [
+  body()
+    .custom((value) => Object.keys(value || {}).length > 0)
+    .withMessage("Debe enviar al menos un campo para actualizar"),
+  ...buildUserValidators(true),
 ];
 
-module.exports = { createUserValidator };
+module.exports = {
+  createUserValidator,
+  updateUserValidator,
+  userIdValidator,
+};

@@ -47,6 +47,14 @@ function checkIsAdmin(req, res, next) {
   next();
 }
 
+function checkCanReadModalitiesList(req, res, next) {
+  if (req.token?.role === 1 || req.token?.role === 2) {
+    return next();
+  }
+
+  return res.status(403).json({ message: "Acceso denegado" });
+}
+
 function parseBody(req, res, next) {
   const result = validationResult(req);
   if (!result.isEmpty()) {
@@ -57,4 +65,10 @@ function parseBody(req, res, next) {
   next();
 }
 
-module.exports = { validateRequest, verifyToken, checkIsAdmin, parseBody };
+module.exports = {
+  validateRequest,
+  verifyToken,
+  checkIsAdmin,
+  checkCanReadModalitiesList,
+  parseBody,
+};
