@@ -4,15 +4,15 @@ const {
   bootstrapAdmin,
   bootstrapAdminValidators,
 } = require("./handlers/bootstrap-admin");
-const { parseBody } = require("../../main.middlewares");
+const { validateRequest } = require("../../main.middlewares");
 
 const AuthRouter = express.Router();
 
-AuthRouter.post("/login", loginValidators, parseBody, login);
+AuthRouter.post("/login", loginValidators, validateRequest, login);
 AuthRouter.post(
   "/bootstrap-admin",
   bootstrapAdminValidators,
-  parseBody,
+  validateRequest,
   bootstrapAdmin,
 );
 

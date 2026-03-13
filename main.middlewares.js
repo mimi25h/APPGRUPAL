@@ -55,20 +55,9 @@ function checkCanReadModalitiesList(req, res, next) {
   return res.status(403).json({ message: "Acceso denegado" });
 }
 
-function parseBody(req, res, next) {
-  const result = validationResult(req);
-  if (!result.isEmpty()) {
-    res.status(400).json({ success: false, errors: result.array() });
-    return;
-  }
-  req.parsedBody = matchedData(req);
-  next();
-}
-
 module.exports = {
   validateRequest,
   verifyToken,
   checkIsAdmin,
   checkCanReadModalitiesList,
-  parseBody,
 };
