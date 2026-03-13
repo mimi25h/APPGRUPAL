@@ -7,6 +7,12 @@ const usersRoutes = require("./modules/users/routes");
 const organizationsRoutes = require("./modules/organizations/routes");
 const modalitiesRoutes = require("./modules/modalities/routes");
 
+// Middlewares
+const { verifyToken } = require("./main.middlewares");
+
+// Cargar rutas de módulos.
+const AuthRouter = require("./modules/auth/routes");
+
 let mongoOk = false;
 
 function mainServer() {
@@ -81,6 +87,12 @@ function mainServer() {
       });
     }
   });
+
+  // Rutas de autenticación (abiertas).
+  app.use("/auth", AuthRouter);
+
+  // No permitir usuarios no autorizados a otras rutas.
+  app.use(verifyToken);
 
   app.listen(HTTP_PORT, () => {
     console.log(`Server HTTP http://localhost:${HTTP_PORT}`);
