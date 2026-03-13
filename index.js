@@ -15,6 +15,18 @@ function runServer() {
     }
 
     dotenv.config({ path: CONFIG_ENV_PATH });
+
+    const requiredEnvVars = ["MONGO_URI", "JWT_SECRET"];
+    const missingEnvVars = requiredEnvVars.filter(
+      (key) => !process.env[key] || !process.env[key].trim(),
+    );
+
+    if (missingEnvVars.length > 0) {
+      throw new Error(
+        `Faltan variables de entorno: ${missingEnvVars.join(", ")}`,
+      );
+    }
+
     mainServer();
   } catch (err) {
     console.log("El archivo de configuracion no existe o es invalido.");
