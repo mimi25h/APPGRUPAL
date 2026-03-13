@@ -30,7 +30,7 @@ const createUserValidator = [
     .normalizeEmail(),
 
   body("role")
-    .optional()
+    .trim()
     .isInt()
     .withMessage("role debe ser un numero entero")
     .toInt(),
