@@ -8,9 +8,11 @@ const {
   updateUserValidator,
   userIdValidator,
 } = require("./validators");
-const { validateRequest } = require("../../main.middlewares");
+const { checkIsAdmin, validateRequest } = require("../../main.middlewares");
 
 const router = express.Router();
+
+router.use(checkIsAdmin);
 
 router.get("/", readUsers);
 router.get("/:id", userIdValidator, validateRequest, readUsers);

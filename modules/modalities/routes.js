@@ -8,11 +8,18 @@ const {
   modalityIdValidator,
   updateModalityValidator,
 } = require("./validators");
-const { validateRequest } = require("../../main.middlewares");
+const {
+  checkCanReadModalitiesList,
+  checkIsAdmin,
+  validateRequest,
+} = require("../../main.middlewares");
 
 const router = express.Router();
 
-router.get("/", readModalities);
+router.get("/", checkCanReadModalitiesList, readModalities);
+
+router.use(checkIsAdmin);
+
 router.get("/:id", modalityIdValidator, validateRequest, readModalities);
 router.post("/", createModalityValidator, validateRequest, createModality);
 router.put(

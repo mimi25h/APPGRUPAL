@@ -60,11 +60,19 @@ function emailValidator(isUpdate = false) {
     .normalizeEmail();
 }
 
-function roleValidator() {
-  return body("role")
-    .optional()
+function roleValidator(isUpdate = false) {
+  const validator = body("role");
+  if (isUpdate) {
+    validator.optional();
+  } else {
+    validator.notEmpty().withMessage("role es obligatorio");
+  }
+
+  return validator
     .isInt()
     .withMessage("role debe ser un numero entero")
+    .isIn([1, 2])
+    .withMessage("role debe ser 1 (Administrador) o 2 (Visor)")
     .toInt();
 }
 
@@ -105,7 +113,7 @@ function buildUserValidators(isUpdate = false) {
     usernameValidator(isUpdate),
     passwordValidator(isUpdate),
     emailValidator(isUpdate),
-    roleValidator(),
+    roleValidator(isUpdate),
     settingsValidator(),
     settingsLanguageValidator(),
     settingsThemeValidator(),
