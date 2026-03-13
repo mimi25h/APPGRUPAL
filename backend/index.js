@@ -1,8 +1,5 @@
-const fs = require("fs");
-const path = require("path");
-const dotenv = require("dotenv");
 const mainServer = require("./main.server");
-const { checkConfigFile } = require("./config/env");
+const { loadConfig } = require("./config/env");
 
 function runServer() {
   try {
@@ -11,8 +8,6 @@ function runServer() {
 
     mainServer();
   } catch (err) {
-    console.log("El archivo de configuracion no existe o es invalido.");
-    console.log("Este archivo es necesario para correr el servidor backend.");
     console.error(err.message);
   }
 }
