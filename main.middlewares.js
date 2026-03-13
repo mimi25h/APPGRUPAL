@@ -11,6 +11,11 @@ function validateRequest(req, res, next) {
     });
   }
 
+  req.parsedBody = matchedData(req, {
+    locations: ["body"],
+    includeOptionals: true,
+  });
+
   next();
 }
 

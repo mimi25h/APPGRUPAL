@@ -23,11 +23,6 @@ function mainServer() {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
-  app.use("/api/people", peopleRoutes);
-  app.use("/api/users", usersRoutes);
-  app.use("/api/organizations", organizationsRoutes);
-  app.use("/api/modalities", modalitiesRoutes);
-
   // Conectar a MongoDB al iniciar el servidor.
   (async () => {
     try {
@@ -45,7 +40,7 @@ function mainServer() {
     }
   })();
 
-  // Health endpoint.
+  // Health endpoint (público).
   app.get("/", (req, res) => {
     const estadoConexion = mongoose.connection.readyState;
     const estados = {
@@ -88,11 +83,16 @@ function mainServer() {
     }
   });
 
-  // Rutas de autenticación (abiertas).
+  // Rutas de autenticación (públicas).
   app.use("/auth", AuthRouter);
 
   // No permitir usuarios no autorizados a otras rutas.
   app.use(verifyToken);
+
+  app.use("/api/people", peopleRoutes);
+  app.use("/api/users", usersRoutes);
+  app.use("/api/organizations", organizationsRoutes);
+  app.use("/api/modalities", modalitiesRoutes);
 
   app.listen(HTTP_PORT, () => {
     console.log(`Server HTTP http://localhost:${HTTP_PORT}`);
