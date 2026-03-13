@@ -1,17 +1,27 @@
 const express = require("express");
-const Users = require("./schemas");
-const { createUserValidator } = require("./validators");
+const createUser = require("./handlers/create");
+const readUsers = require("./handlers/read");
+const updateUser = require("./handlers/update");
+const deleteUser = require("./handlers/delete");
+const {
+  createUserValidator,
+  updateUserValidator,
+  userIdValidator,
+} = require("./validators");
 const { validateRequest } = require("../../main.middlewares");
 
 const router = express.Router();
 
-router.post("/", createUserValidator, validateRequest, async (req, res) => {
-  try {
-    const created = await Users.create(req.body);
-    res.status(201).json({ ok: true, data: created });
-  } catch (error) {
-    res.status(500).json({ ok: false, message: error.message });
-  }
-});
+router.get("/", readUsers);
+router.get("/:id", userIdValidator, validateRequest, readUsers);
+router.post("/", createUserValidator, validateRequest, createUser);
+router.put(
+  "/:id",
+  userIdValidator,
+  updateUserValidator,
+  validateRequest,
+  updateUser,
+);
+router.delete("/:id", userIdValidator, validateRequest, deleteUser);
 
 module.exports = router;

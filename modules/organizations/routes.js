@@ -1,22 +1,37 @@
 const express = require("express");
-const Organization = require("./schemas");
-const { createOrganizationValidator } = require("./validators");
+const createOrganization = require("./handlers/create");
+const readOrganizations = require("./handlers/read");
+const updateOrganization = require("./handlers/update");
+const deleteOrganization = require("./handlers/delete");
+const {
+  createOrganizationValidator,
+  organizationIdValidator,
+  updateOrganizationValidator,
+} = require("./validators");
 const { validateRequest } = require("../../main.middlewares");
 
 const router = express.Router();
 
+router.get("/", readOrganizations);
+router.get("/:id", organizationIdValidator, validateRequest, readOrganizations);
 router.post(
   "/",
   createOrganizationValidator,
   validateRequest,
-  async (req, res) => {
-    try {
-      const created = await Organization.create(req.body);
-      res.status(201).json({ ok: true, data: created });
-    } catch (error) {
-      res.status(500).json({ ok: false, message: error.message });
-    }
-  },
+  createOrganization,
+);
+router.put(
+  "/:id",
+  organizationIdValidator,
+  updateOrganizationValidator,
+  validateRequest,
+  updateOrganization,
+);
+router.delete(
+  "/:id",
+  organizationIdValidator,
+  validateRequest,
+  deleteOrganization,
 );
 
 module.exports = router;
