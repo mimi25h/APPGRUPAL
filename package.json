@@ -19,7 +19,6 @@
   },
   "homepage": "https://github.com/mimi25h/APPGRUPAL#readme",
   "dependencies": {
-    "argon": "^2.0.21",
     "argon2": "^0.44.0",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
