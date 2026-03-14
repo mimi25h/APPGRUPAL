@@ -1,9 +1,12 @@
+const dotenv = require("dotenv");
 const fs = require("fs");
 const path = require("path");
-const dotenv = require("dotenv");
 const mainServer = require("./main.server");
 
 const CONFIG_ENV_PATH = path.join(__dirname, "config", ".env");
+dotenv.config({ path: CONFIG_ENV_PATH });
+
+console.log("Loaded secret:", process.env.JWT_SECRET);
 
 function runServer() {
   try {
