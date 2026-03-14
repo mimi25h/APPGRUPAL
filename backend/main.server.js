@@ -3,6 +3,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const { connectToMongo } = require("./config/db");
 
+
 // Middlewares
 const { verifyToken } = require("./main.middlewares");
 
@@ -95,9 +96,9 @@ function mainServer() {
   app.use("/api/organizations", organizationsRoutes);
   app.use("/api/modalities", modalitiesRoutes);
 
-  app.listen(HTTP_PORT, () => {
-    console.log(`Server HTTP http://localhost:${HTTP_PORT}`);
-  });
+ app.listen(3000, "0.0.0.0", () => {
+  console.log("Server running on all interfaces, port 3000");
+});
 }
 
 module.exports = mainServer;
