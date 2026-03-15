@@ -18,7 +18,9 @@ const router = express.Router();
 
 router.get("/", checkCanReadModalitiesList, readModalities);
 
-router.use(checkIsAdmin);
+//router.use(checkIsAdmin);
+
+//WARNING
 
 router.get("/:id", modalityIdValidator, validateRequest, readModalities);
 router.post("/", createModalityValidator, validateRequest, createModality);

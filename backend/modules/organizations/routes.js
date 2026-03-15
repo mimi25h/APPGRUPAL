@@ -12,7 +12,9 @@ const { checkIsAdmin, validateRequest } = require("../../main.middlewares");
 
 const router = express.Router();
 
-router.use(checkIsAdmin);
+//router.use(checkIsAdmin);
+
+//WARNING
 
 router.get("/", readOrganizations);
 router.get("/:id", organizationIdValidator, validateRequest, readOrganizations);

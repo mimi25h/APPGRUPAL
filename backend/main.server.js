@@ -88,7 +88,9 @@ function mainServer() {
   app.use("/auth", AuthRouter);
 
   // No permitir usuarios no autorizados a otras rutas.
-  app.use(verifyToken);
+  //app.use(verifyToken);
+
+  //WARNING, THE AUTHORIZED USER CHECKING IS DISABLED FOR THE PURPOSE OF CREATING THE UI, IF YOU SEE THIS TURNED OFF WHILE DEVELOPING YOUR OWN FUNCTIONS TURN IT ON.
 
   // Rutas de módulos
   app.use("/api/people", peopleRoutes);
