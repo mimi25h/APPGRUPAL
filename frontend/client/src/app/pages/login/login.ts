@@ -23,7 +23,7 @@ export class PersonLogin {
   errorMessage = signal('');
 
   // Signal to track if someone is logged in
-  isLoggedIn = signal(!!localStorage.getItem('token'));
+  isLoggedIn = signal(!!localStorage.getItem('personId'));
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -44,11 +44,12 @@ export class PersonLogin {
       .subscribe({
         next: (res) => {
           if (res.ok && res.data) {
-            localStorage.setItem("token", res.data.token);
+
+            // Only store personId for persons — NO token
             localStorage.setItem("personId", res.data.person._id);
-            
-            this.isLoggedIn.set(true); // update login state
+
             this.router.navigate(['/people']);
+
           } else {
             this.errorMessage.set(res.message || 'Document not found.');
           }
@@ -95,8 +96,8 @@ export class PersonLogin {
   
   logout() {
     localStorage.removeItem("token");
-    localStorage.removeItem("personId"); // optional
-    this.isLoggedIn.set(false);          // update login state
+    localStorage.removeItem("personId");
+    this.isLoggedIn.set(false);
     this.router.navigate(['/login']);
   }
 }

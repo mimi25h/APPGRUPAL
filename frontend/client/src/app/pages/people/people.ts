@@ -23,7 +23,7 @@ export class People implements OnInit {
     phone_numbers: ''
   };
 
-  isAdmin = false;
+  isAdmin = false;     // Only true if a user token exists
 
   constructor(
     private peopleService: PeopleService,
@@ -36,6 +36,7 @@ export class People implements OnInit {
     this.loadPeople();
   }
 
+  // Check if a user is logged in and is admin
   detectRole() {
     const token = localStorage.getItem("token");
 
@@ -46,26 +47,25 @@ export class People implements OnInit {
 
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
-      this.isAdmin = payload.role === 1;
+      this.isAdmin = payload.role === 1; // Only users with role=1 are admins
     } catch {
       this.isAdmin = false;
     }
   }
 
-loadPeople() {
-  this.peopleService.getAll().subscribe({
-    next: (res: any) => {
-      this.people = res.data;
-      this.cdr.detectChanges();
-    },
-    error: (err) => {
-      console.error(err);
-    }
-  });
-}
+  loadPeople() {
+    this.peopleService.getAll().subscribe({
+      next: (res: any) => {
+        this.people = res.data;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+  }
 
   createPerson() {
-
     if (!this.isAdmin) return;
 
     const payload = {
@@ -77,7 +77,6 @@ loadPeople() {
 
     this.peopleService.create(payload).subscribe({
       next: () => {
-
         this.newPerson = {
           document: '',
           name_01: '',
@@ -85,9 +84,7 @@ loadPeople() {
           birth_date: '',
           phone_numbers: ''
         };
-
         this.loadPeople();
-
       },
       error: (err) => {
         console.log("BACKEND ERROR:", err.error);
@@ -96,7 +93,6 @@ loadPeople() {
   }
 
   deletePerson(id: string) {
-
     if (!this.isAdmin) return;
 
     this.peopleService.delete(id).subscribe({
@@ -110,13 +106,18 @@ loadPeople() {
     });
   }
 
+  // Logout only clears token for users
   logout() {
     localStorage.removeItem("token");
-    this.router.navigate(['/']);
+    localStorage.removeItem("personId");
+    this.router.navigate(['/login']);
   }
 
+  // Navigate to Users page (admins only)
   goToUsers() {
-    this.router.navigate(['/users']);
+    if (this.isAdmin) {
+      this.router.navigate(['/users']);
+    }
   }
 
 }

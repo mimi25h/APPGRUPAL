@@ -39,3 +39,7 @@
   <button type="submit">Create User</button>
 
 </form>
+
+<div class="logout-container" *ngIf="token && token.length > 0">
+  <button type="button" (click)="goToPeople()">Go to People</button>
+</div>
