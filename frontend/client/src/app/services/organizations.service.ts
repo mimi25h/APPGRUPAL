@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { map } from 'rxjs';
+import { API_BASE_URL } from '../core/config/api.config';
 
 interface Organization {
   _id: string;
@@ -19,7 +20,7 @@ type UpdateOrganization = Partial<CreateOrganization>;
 })
 export class OrganizationsService {
   private http = inject(HttpClient);
-  private api = 'http://localhost:3000/api/organizations';
+  private api = `${API_BASE_URL}/api/organizations`;
 
   getAll() {
     return this.http.get<{ data: Organization[] }>(this.api).pipe(map((res) => res.data));
