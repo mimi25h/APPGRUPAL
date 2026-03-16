@@ -81,3 +81,40 @@ h1 {
   padding: 10px 12px;
   border-bottom: 1px solid #eee;
 }
+
+.logout-container {
+  text-align: center; /* center children horizontally */
+  margin: 16px 0;     /* optional spacing above/below */
+}
+
+button.logout-btn {
+  display: inline-block;      
+  padding: 14px 48px;           
+  font-size: 0.8rem;          
+  border-radius: 4px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  cursor: pointer;
+  width: auto;                
+}
+
+button.logout-btn:hover {
+  background-color: #d32f2f;
+}
+
+button.user-btn {
+  display: inline-block;      
+  padding: 14px 48px;           
+  font-size: 0.8rem;          
+  border-radius: 4px;
+  background-color: #3457f4;
+  color: white;
+  border: none;
+  cursor: pointer;
+  width: auto;                
+}
+
+button.user-btn:hover {
+  background-color: #3474f4;
+}

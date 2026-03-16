@@ -1,8 +1,6 @@
-<h1>People</h1>
+<h1 *ngIf="isAdmin">People creation centre</h1>
 
-<form #personForm="ngForm" (ngSubmit)="createPerson()">
-
-<form #personForm="ngForm" (ngSubmit)="createPerson()">
+<form *ngIf="isAdmin" #personForm="ngForm" (ngSubmit)="createPerson()">
 
   <!-- DOCUMENT -->
   <input
@@ -20,7 +18,6 @@
     <small *ngIf="document.errors?.['maxlength']">Document must be under 20 characters</small>
   </div>
 
-
   <!-- FIRST NAME -->
   <input
     name="name_01"
@@ -37,8 +34,7 @@
     <small *ngIf="name01.errors?.['maxlength']">First name must be under 80 characters</small>
   </div>
 
-
-  <!-- SECOND NAME (OPTIONAL) -->
+  <!-- SECOND NAME -->
   <input
     name="name_02"
     [(ngModel)]="newPerson.name_02"
@@ -46,12 +42,6 @@
     maxlength="80"
     placeholder="Second name (optional)"
     #name02="ngModel">
-
-  <div *ngIf="name02.touched && name02.invalid">
-    <small *ngIf="name02.errors?.['minlength']">Second name must be at least 2 characters</small>
-    <small *ngIf="name02.errors?.['maxlength']">Second name must be under 80 characters</small>
-  </div>
-
 
   <!-- FIRST SURNAME -->
   <input
@@ -63,14 +53,7 @@
     placeholder="First surname"
     #surname01="ngModel">
 
-  <div *ngIf="surname01.touched && surname01.invalid">
-    <small *ngIf="surname01.errors?.['required']">First surname is required</small>
-    <small *ngIf="surname01.errors?.['minlength']">First surname must be at least 2 characters</small>
-    <small *ngIf="surname01.errors?.['maxlength']">First surname must be under 80 characters</small>
-  </div>
-
-
-  <!-- SECOND SURNAME (OPTIONAL) -->
+  <!-- SECOND SURNAME -->
   <input
     name="surname_02"
     [(ngModel)]="newPerson.surname_02"
@@ -79,12 +62,6 @@
     placeholder="Second surname (optional)"
     #surname02="ngModel">
 
-  <div *ngIf="surname02.touched && surname02.invalid">
-    <small *ngIf="surname02.errors?.['minlength']">Second surname must be at least 2 characters</small>
-    <small *ngIf="surname02.errors?.['maxlength']">Second surname must be under 80 characters</small>
-  </div>
-
-
   <!-- BIRTH DATE -->
   <input
     type="date"
@@ -92,11 +69,6 @@
     [(ngModel)]="newPerson.birth_date"
     required
     #birthDate="ngModel">
-
-  <div *ngIf="birthDate.touched && birthDate.invalid">
-    <small *ngIf="birthDate.errors?.['required']">Birth date is required</small>
-  </div>
-
 
   <!-- GENDER -->
   <select
@@ -109,7 +81,6 @@
     <option value="1">Female</option>
   </select>
 
-
   <!-- PHONE NUMBERS -->
   <input
     name="phone_numbers"
@@ -119,12 +90,6 @@
     placeholder="Phone numbers (comma separated)"
     #phones="ngModel">
 
-  <div *ngIf="phones.touched && phones.invalid">
-    <small *ngIf="phones.errors?.['minlength']">Phone must be at least 6 characters</small>
-    <small *ngIf="phones.errors?.['maxlength']">Phone must be under 20 characters</small>
-  </div>
-
-
   <button type="submit" [disabled]="personForm.invalid">
     Create Person
   </button>
@@ -132,22 +97,39 @@
 </form>
 
 
-
 <div class="people-card">
-  <h1>People</h1>
+
+  <h1>List of all people registered on the site</h1>
+
   <ul class="people-list">
 
     <li *ngFor="let person of people">
 
       <span class="person-name">
-        {{person.name_01}} {{person.surname_01}}
+        {{ person.name_01 }} {{ person.surname_01 }}
       </span>
 
-      <button class="delete-btn" (click)="deletePerson(person._id)">
+      <button
+        *ngIf="isAdmin"
+        class="delete-btn"
+        (click)="deletePerson(person._id)">
         Delete
       </button>
 
     </li>
 
   </ul>
+
+</div>
+
+<div class="logout-container">
+  <button class="logout-btn" (click)="logout()">
+    Logout
+  </button>
+</div>
+
+<div class="logout-container">
+  <button class="user-btn" *ngIf="isAdmin" type="button" (click)="goToUsers()">
+  Go to Users
+</button>
 </div>
