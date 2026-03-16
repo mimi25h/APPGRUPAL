@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs';
+import { API_BASE_URL } from '../core/config/api.config';
 
 interface Person {
   _id: string;
@@ -23,7 +24,7 @@ type UpdatePerson = Partial<CreatePerson>;
 })
 export class PeopleService {
   private http = inject(HttpClient);
-  private api = 'http://localhost:3000/api/people';
+  private api = `${API_BASE_URL}/api/people`;
 
   getAll() {
     return this.http.get<{ data: Person[] }>(this.api).pipe(map((res) => res.data));
