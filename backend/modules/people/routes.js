@@ -1,3 +1,4 @@
+//PEOPLE
 const express = require("express");
 const createPeople = require("./handlers/create");
 const readPeople = require("./handlers/read");
