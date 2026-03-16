@@ -95,8 +95,8 @@ function mainServer() {
   app.use("/api/organizations", organizationsRoutes);
   app.use("/api/modalities", modalitiesRoutes);
 
-  app.listen(3000, "0.0.0.0", () => {
-    console.log("Server running on all interfaces, port 3000");
+  app.listen(HTTP_PORT, "0.0.0.0", () => {
+    console.log(`Server running on all interfaces, port ${HTTP_PORT}`);
   });
 }
 
