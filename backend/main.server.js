@@ -3,7 +3,6 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const { connectToMongo } = require("./config/db");
 
-
 // Middlewares
 const { verifyToken } = require("./main.middlewares");
 
@@ -88,9 +87,7 @@ function mainServer() {
   app.use("/auth", AuthRouter);
 
   // No permitir usuarios no autorizados a otras rutas.
-  //app.use(verifyToken);
-
-  //WARNING, THE AUTHORIZED USER CHECKING IS DISABLED FOR THE PURPOSE OF CREATING THE UI, IF YOU SEE THIS TURNED OFF WHILE DEVELOPING YOUR OWN FUNCTIONS TURN IT ON.
+  app.use(verifyToken);
 
   // Rutas de módulos
   app.use("/api/people", peopleRoutes);
@@ -98,9 +95,9 @@ function mainServer() {
   app.use("/api/organizations", organizationsRoutes);
   app.use("/api/modalities", modalitiesRoutes);
 
- app.listen(3000, "0.0.0.0", () => {
-  console.log("Server running on all interfaces, port 3000");
-});
+  app.listen(3000, "0.0.0.0", () => {
+    console.log("Server running on all interfaces, port 3000");
+  });
 }
 
 module.exports = mainServer;
