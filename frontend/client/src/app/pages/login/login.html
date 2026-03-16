@@ -2,7 +2,6 @@
 
 <!-- PERSON LOGIN -->
 <form #personForm="ngForm" (ngSubmit)="submitLogin(personForm)">
-
   <h2>Login as Person</h2>
 
   <input
@@ -15,42 +14,23 @@
   />
 
   <button type="submit">Login as Person</button>
-
 </form>
-
-
 
 <!-- USER LOGIN -->
 <form #userForm="ngForm" (ngSubmit)="submitUserLogin(userForm)">
-
   <h2>Login as User</h2>
 
-  <input
-    name="username"
-    [(ngModel)]="username"
-    required
-    placeholder="Username"
-  />
+  <input name="username" [(ngModel)]="username" required placeholder="Username" />
 
-  <input
-    name="password"
-    [(ngModel)]="password"
-    type="password"
-    required
-    placeholder="Password"
-  />
+  <input name="password" [(ngModel)]="password" type="password" required placeholder="Password" />
 
   <button type="submit">Login as User</button>
-
 </form>
 
 <div class="logout-container">
-  <button class="logout-btn" *ngIf="isLoggedIn()" (click)="logout()">
-    Logout
-  </button>
+  <button class="logout-btn" *ngIf="isLoggedIn" (click)="logout()">Logout</button>
 </div>
 
-<div *ngIf="errorMessage()" class="error">
-  {{ errorMessage() }}
+<div *ngIf="errorMessage" class="error">
+  {{ errorMessage }}
 </div>
-
