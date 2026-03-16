@@ -9,10 +9,9 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './people.html',
-  styleUrls: ['./people.css']
+  styleUrls: ['./people.css'],
 })
 export class People implements OnInit {
-
   people: any[] = [];
 
   newPerson: any = {
@@ -20,15 +19,15 @@ export class People implements OnInit {
     name_01: '',
     surname_01: '',
     birth_date: '',
-    phone_numbers: ''
+    phone_numbers: '',
   };
 
-  isAdmin = false;     // Only true if a user token exists
+  isAdmin = false; // Only true if a user token exists
 
   constructor(
     private peopleService: PeopleService,
     private cdr: ChangeDetectorRef,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -38,7 +37,7 @@ export class People implements OnInit {
 
   // Check if a user is logged in and is admin
   detectRole() {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
 
     if (!token) {
       this.isAdmin = false;
@@ -55,13 +54,13 @@ export class People implements OnInit {
 
   loadPeople() {
     this.peopleService.getAll().subscribe({
-      next: (res: any) => {
-        this.people = res.data;
+      next: (res) => {
+        this.people = res;
         this.cdr.detectChanges();
       },
       error: (err) => {
         console.error(err);
-      }
+      },
     });
   }
 
@@ -72,7 +71,7 @@ export class People implements OnInit {
       ...this.newPerson,
       phone_numbers: this.newPerson.phone_numbers
         ? this.newPerson.phone_numbers.split(',').map((p: string) => p.trim())
-        : []
+        : [],
     };
 
     this.peopleService.create(payload).subscribe({
@@ -82,13 +81,13 @@ export class People implements OnInit {
           name_01: '',
           surname_01: '',
           birth_date: '',
-          phone_numbers: ''
+          phone_numbers: '',
         };
         this.loadPeople();
       },
       error: (err) => {
-        console.log("BACKEND ERROR:", err.error);
-      }
+        console.log('BACKEND ERROR:', err.error);
+      },
     });
   }
 
@@ -97,19 +96,19 @@ export class People implements OnInit {
 
     this.peopleService.delete(id).subscribe({
       next: () => {
-        this.people = this.people.filter(p => p._id !== id);
+        this.people = this.people.filter((p) => p._id !== id);
         this.cdr.detectChanges();
       },
       error: (err) => {
-        console.error("Delete failed:", err);
-      }
+        console.error('Delete failed:', err);
+      },
     });
   }
 
   // Logout only clears token for users
   logout() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("personId");
+    localStorage.removeItem('token');
+    localStorage.removeItem('personId');
     this.router.navigate(['/login']);
   }
 
@@ -119,5 +118,4 @@ export class People implements OnInit {
       this.router.navigate(['/users']);
     }
   }
-
 }
