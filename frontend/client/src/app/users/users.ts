@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { NgIf } from '@angular/common';
+import { AuthService } from '../core/auth/auth.service';
+import { UsersService } from '../services/users.service';
 
 @Component({
   selector: 'app-users',
@@ -12,66 +13,64 @@ import { NgIf } from '@angular/common';
   styleUrls: ['./users.css'],
 })
 export class Users {
-
   fk_person = '';
   username = '';
   email = '';
   password = '';
-  role = 2;
+  role: 1 | 2 = 2;
+  token = '';
+  currentRole: 1 | 2 | null = null;
 
-  // safe initialization
-  token: string = '';
-
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private usersService: UsersService,
+  ) {}
 
   ngOnInit() {
-    const storedToken = localStorage.getItem('token');
-    if (!storedToken) {
+    this.token = this.authService.getToken() ?? '';
+    this.currentRole = this.authService.getCurrentRoleFromToken();
+
+    if (!this.token) {
       this.router.navigate(['/login']);
       return;
     }
-    this.token = storedToken;
 
-    try {
-      const payload = JSON.parse(atob(this.token.split('.')[1]));
-      this.fk_person = payload.id; // auto-fill your own ID
-    } catch {
+    this.fk_person = this.authService.getCurrentUserIdFromToken() ?? '';
+
+    if (!this.fk_person || this.currentRole !== 1) {
       this.router.navigate(['/login']);
     }
   }
 
   createUser(form: NgForm) {
-    if (!form.valid) return;
-
-    let fk = this.fk_person || '';
-    if (!fk && this.token) {
-      try {
-        const payload = JSON.parse(atob(this.token.split('.')[1]));
-        fk = payload.id;
-      } catch {
-        alert("Invalid token, cannot determine your ID");
-        return;
-      }
+    if (!form.valid || this.currentRole !== 1) {
+      return;
     }
 
-    this.http.post(
-      "http://localhost:3000/api/users",
-      {
+    const fk = this.fk_person || this.authService.getCurrentUserIdFromToken() || '';
+    if (!fk) {
+      alert('Invalid token, cannot determine your ID');
+      return;
+    }
+
+    this.usersService
+      .create({
         fk_person: fk,
         username: this.username,
         email: this.email,
         password: this.password,
-        role: this.role
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${this.token}`
-        }
-      }
-    ).subscribe({
-      next: res => console.log(res),
-      error: err => console.error(err)
-    });
+        role: this.role,
+      })
+      .subscribe({
+        next: () => {
+          this.username = '';
+          this.email = '';
+          this.password = '';
+          this.role = 2;
+        },
+        error: (err) => console.error(err),
+      });
   }
 
   goToPeople() {
@@ -79,8 +78,7 @@ export class Users {
   }
 
   logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem("personId");
+    this.authService.logout();
     this.router.navigate(['/login']);
   }
 }

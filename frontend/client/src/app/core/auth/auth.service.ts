@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, tap } from 'rxjs';
+import { tap } from 'rxjs';
 
 import { API_BASE_URL, API_ENDPOINTS } from '../config/api.config';
 import {
@@ -64,6 +64,11 @@ export class AuthService {
   getCurrentRoleFromToken(): UserRole | null {
     const payload = this.getTokenPayload();
     return payload?.role ?? null;
+  }
+
+  getCurrentUserIdFromToken(): string | null {
+    const payload = this.getTokenPayload();
+    return payload?.id ?? null;
   }
 
   private getTokenPayload(): JwtPayload | null {
