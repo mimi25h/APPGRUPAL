@@ -36,7 +36,7 @@ export class Users {
       return;
     }
 
-    this.fk_person = this.authService.getCurrentUserIdFromToken() ?? '';
+    this.fk_person = this.authService.getCurrentPersonIdFromToken() ?? '';
 
     if (!this.fk_person || this.currentRole !== 1) {
       this.router.navigate(['/login']);
@@ -48,9 +48,9 @@ export class Users {
       return;
     }
 
-    const fk = this.fk_person || this.authService.getCurrentUserIdFromToken() || '';
+    const fk = this.fk_person || this.authService.getCurrentPersonIdFromToken() || '';
     if (!fk) {
-      alert('Invalid token, cannot determine your ID');
+      alert('Invalid token, cannot determine the related person.');
       return;
     }
 
