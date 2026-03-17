@@ -5,17 +5,13 @@ import { AuthService } from '../../core/auth/auth.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-person-login',
+  selector: 'app-login',
   standalone: true,
   templateUrl: './login.html',
   styleUrls: ['./login.css'],
   imports: [FormsModule, NgIf],
 })
-export class PersonLogin {
-  // PERSON LOGIN
-  document = '';
-
-  // USER LOGIN
+export class Login {
   username = '';
   password = '';
 
@@ -28,32 +24,7 @@ export class PersonLogin {
     this.isLoggedIn = this.authService.isAuthenticated();
   }
 
-  // PERSON LOGIN
   submitLogin(form: NgForm) {
-    this.errorMessage = '';
-
-    if (!form.valid) {
-      this.errorMessage = 'Please enter a valid document.';
-      return;
-    }
-
-    this.authService.loginPerson({ document: this.document }).subscribe({
-      next: (res) => {
-        if (res.ok && res.data) {
-          this.isLoggedIn = true;
-          this.router.navigate(['/people']);
-        } else {
-          this.errorMessage = res.message || 'Document not found.';
-        }
-      },
-      error: (err) => {
-        this.errorMessage = err.error?.message || 'Server error';
-      },
-    });
-  }
-
-  // USER LOGIN
-  submitUserLogin(form: NgForm) {
     this.errorMessage = '';
 
     if (!form.valid) {

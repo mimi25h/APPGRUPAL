@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { PeopleService } from '../../services/people.service';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../../core/auth/auth.service';
 
 @Component({
   selector: 'app-people',
@@ -28,6 +29,7 @@ export class People implements OnInit {
     private peopleService: PeopleService,
     private cdr: ChangeDetectorRef,
     private router: Router,
+    private authService: AuthService,
   ) {}
 
   ngOnInit(): void {
@@ -37,19 +39,7 @@ export class People implements OnInit {
 
   // Check if a user is logged in and is admin
   detectRole() {
-    const token = localStorage.getItem('token');
-
-    if (!token) {
-      this.isAdmin = false;
-      return;
-    }
-
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      this.isAdmin = payload.role === 1; // Only users with role=1 are admins
-    } catch {
-      this.isAdmin = false;
-    }
+    this.isAdmin = this.authService.getCurrentRoleFromToken() === 1;
   }
 
   loadPeople() {
@@ -105,10 +95,9 @@ export class People implements OnInit {
     });
   }
 
-  // Logout only clears token for users
+  // Logout clears the current session
   logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('personId');
+    this.authService.logout();
     this.router.navigate(['/login']);
   }
 
