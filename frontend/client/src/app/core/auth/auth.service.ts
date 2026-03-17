@@ -3,15 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs';
 
 import { API_BASE_URL, API_ENDPOINTS } from '../config/api.config';
-import {
-  ApiResponse,
-  JwtPayload,
-  PersonLoginData,
-  PersonLoginRequest,
-  UserLoginData,
-  UserLoginRequest,
-  UserRole,
-} from './auth.types';
+import { ApiResponse, JwtPayload, UserLoginData, UserLoginRequest, UserRole } from './auth.types';
 import { TokenStorageService } from './token-storage.service';
 
 @Injectable({
@@ -29,21 +21,6 @@ export class AuthService {
           const token = res.data?.token;
           if (res.ok && token) {
             this.tokenStorage.setToken(token);
-            this.tokenStorage.removePersonId();
-          }
-        }),
-      );
-  }
-
-  loginPerson(payload: PersonLoginRequest) {
-    return this.http
-      .post<ApiResponse<PersonLoginData>>(`${API_BASE_URL}${API_ENDPOINTS.peopleLogin}`, payload)
-      .pipe(
-        tap((res) => {
-          const personId = res.data?.person?._id;
-          if (res.ok && personId) {
-            this.tokenStorage.setPersonId(personId);
-            this.tokenStorage.removeToken();
           }
         }),
       );
@@ -58,7 +35,7 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    return !!this.tokenStorage.getToken() || !!this.tokenStorage.getPersonId();
+    return !!this.tokenStorage.getToken();
   }
 
   getCurrentRoleFromToken(): UserRole | null {
@@ -68,7 +45,12 @@ export class AuthService {
 
   getCurrentUserIdFromToken(): string | null {
     const payload = this.getTokenPayload();
-    return payload?.id ?? null;
+    return payload?.userId ?? null;
+  }
+
+  getCurrentPersonIdFromToken(): string | null {
+    const payload = this.getTokenPayload();
+    return payload?.personId ?? null;
   }
 
   private getTokenPayload(): JwtPayload | null {

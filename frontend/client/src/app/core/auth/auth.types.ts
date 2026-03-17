@@ -1,7 +1,8 @@
 export type UserRole = 1 | 2;
 
 export interface JwtPayload {
-  id?: string;
+  userId?: string;
+  personId?: string;
   role?: UserRole;
   iat?: number;
   exp?: number;
@@ -12,19 +13,8 @@ export interface UserLoginRequest {
   password: string;
 }
 
-export interface PersonLoginRequest {
-  document: string;
-}
-
 export interface UserLoginData {
   token: string;
-}
-
-export interface PersonLoginData {
-  person: {
-    _id: string;
-    document?: string;
-  };
 }
 
 export interface ApiResponse<T> {
