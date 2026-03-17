@@ -23,14 +23,20 @@ async function login(req, res) {
   const user = await users.findOne({ username });
 
   if (!user || !(await argon2.verify(user.password, password))) {
-    return res.status(401).json({ message: "Credenciales inválidas" });
+    return res.status(401).json({
+      ok: false,
+      message: "Credenciales inválidas",
+    });
   }
 
   const token = jwt.sign(user.getJWTpayload(), jwtSecret, {
     expiresIn: "1h",
   });
 
-  res.json({ token });
+  return res.json({
+    ok: true,
+    data: { token },
+  });
 }
 
 module.exports = {
