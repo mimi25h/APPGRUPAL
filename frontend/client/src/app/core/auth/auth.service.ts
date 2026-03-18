@@ -9,6 +9,7 @@ import { TokenStorageService } from './token-storage.service';
 @Injectable({
   providedIn: 'root',
 })
+
 export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly tokenStorage = inject(TokenStorageService);
@@ -71,4 +72,16 @@ export class AuthService {
       return null;
     }
   }
+
+ loginPerson(personId: string): void {
+      this.tokenStorage.setPersonId(personId);
+    }
+
+  getPersonId(): string | null {
+      return this.tokenStorage.getPersonId();
+    }
+
+  isPersonAuthenticated(): boolean {
+      return !!this.getPersonId();
+    }
 }
