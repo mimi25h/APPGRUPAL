@@ -33,16 +33,13 @@ export class People implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (
-        !this.authService.isAuthenticated() &&
-        !this.authService.isPersonAuthenticated()
-      ) {
-        this.router.navigate(['/login']);
-        return;
-      }
+    if (!this.authService.isAuthenticated()) {
+      this.router.navigate(['/login']);
+      return;
+    }
 
-      this.detectRole();
-      this.loadPeople();
+    this.detectRole();
+    this.loadPeople();
   }
 
   // Check if a user is logged in and is admin

@@ -1,35 +1,14 @@
 <h1>Create User</h1>
 
 <form #userForm="ngForm" (ngSubmit)="createUser(userForm)">
+  <!-- Person ID is required: it must reference an existing person document -->
+  <input name="fk_person" [(ngModel)]="fk_person" placeholder="Person ID (required)" />
 
-  <!-- Person ID: optional, auto-fill with your own if empty -->
-  <input
-    name="fk_person"
-    [(ngModel)]="fk_person"
-    placeholder="Person ID (leave empty for yourself)"
-  />
+  <input name="username" [(ngModel)]="username" placeholder="Username" required />
 
-  <input
-    name="username"
-    [(ngModel)]="username"
-    placeholder="Username"
-    required
-  />
+  <input name="email" [(ngModel)]="email" placeholder="Email" required />
 
-  <input
-    name="email"
-    [(ngModel)]="email"
-    placeholder="Email"
-    required
-  />
-
-  <input
-    name="password"
-    [(ngModel)]="password"
-    type="password"
-    placeholder="Password"
-    required
-  />
+  <input name="password" [(ngModel)]="password" type="password" placeholder="Password" required />
 
   <select name="role" [(ngModel)]="role">
     <option [value]="1">Admin</option>
@@ -37,7 +16,6 @@
   </select>
 
   <button type="submit">Create User</button>
-
 </form>
 
 <div class="logout-container" *ngIf="token && token.length > 0">

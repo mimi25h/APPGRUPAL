@@ -36,9 +36,7 @@ export class Users {
       return;
     }
 
-    this.fk_person = this.authService.getCurrentPersonIdFromToken() ?? '';
-
-    if (!this.fk_person || this.currentRole !== 1) {
+    if (this.currentRole !== 1) {
       this.router.navigate(['/login']);
     }
   }
@@ -48,9 +46,9 @@ export class Users {
       return;
     }
 
-    const fk = this.fk_person || this.authService.getCurrentPersonIdFromToken() || '';
+    const fk = this.fk_person.trim();
     if (!fk) {
-      alert('Invalid token, cannot determine the related person.');
+      alert('Person ID is required to create a user.');
       return;
     }
 

@@ -5,12 +5,10 @@ import { Injectable } from '@angular/core';
 })
 export class TokenStorageService {
   private readonly tokenKey = 'token';
-  private readonly personKey = 'personId';
 
-  // --- USER (JWT) ---
+  // JWT session storage
   setToken(token: string): void {
     localStorage.setItem(this.tokenKey, token);
-    localStorage.removeItem(this.personKey); // 🔥 prevent mix
   }
 
   getToken(): string | null {
@@ -21,32 +19,13 @@ export class TokenStorageService {
     localStorage.removeItem(this.tokenKey);
   }
 
-  // --- PERSON ---
-  setPersonId(id: string): void {
-    localStorage.setItem(this.personKey, id);
-    localStorage.removeItem(this.tokenKey);
-  }
-
-  getPersonId(): string | null {
-    return localStorage.getItem(this.personKey);
-  }
-
-  removePersonId(): void {
-    localStorage.removeItem(this.personKey);
-  }
-
-  // --- HELPERS ---
+  // Session helper
   isUserLoggedIn(): boolean {
     return !!this.getToken();
   }
 
-  isPersonLoggedIn(): boolean {
-    return !!this.getPersonId();
-  }
-
-  // --- LOGOUT ---
+  // Session cleanup
   clearSession(): void {
     localStorage.removeItem(this.tokenKey);
-    localStorage.removeItem(this.personKey);
   }
 }

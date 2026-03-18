@@ -1,9 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { AuthService } from '../../core/auth/auth.service';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -20,12 +19,11 @@ export class Login {
   isLoggedIn = false;
 
   constructor(
-    private http: HttpClient,
     private router: Router,
-    private authService: AuthService
-    ) {
-      this.isLoggedIn = this.authService.isAuthenticated();
-    }
+    private authService: AuthService,
+  ) {
+    this.isLoggedIn = this.authService.isAuthenticated();
+  }
 
   submitLogin(form: NgForm) {
     this.errorMessage = '';

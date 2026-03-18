@@ -9,7 +9,6 @@ import { TokenStorageService } from './token-storage.service';
 @Injectable({
   providedIn: 'root',
 })
-
 export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly tokenStorage = inject(TokenStorageService);
@@ -36,7 +35,30 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    return !!this.tokenStorage.getToken();
+    const token = this.tokenStorage.getToken();
+    if (!token) {
+      return false;
+    }
+
+    const payload = this.getTokenPayload();
+    if (!payload) {
+      this.tokenStorage.clearSession();
+      return false;
+    }
+
+    // If exp is not present, treat token as valid structurally.
+    if (!payload.exp) {
+      return true;
+    }
+
+    const nowInSeconds = Math.floor(Date.now() / 1000);
+    const isValid = payload.exp > nowInSeconds;
+
+    if (!isValid) {
+      this.tokenStorage.clearSession();
+    }
+
+    return isValid;
   }
 
   getCurrentRoleFromToken(): UserRole | null {
@@ -66,22 +88,16 @@ export class AuthService {
     }
 
     try {
-      const payloadString = atob(tokenParts[1]);
+      const payloadString = this.decodeBase64Url(tokenParts[1]);
       return JSON.parse(payloadString) as JwtPayload;
     } catch {
       return null;
     }
   }
 
- loginPerson(personId: string): void {
-      this.tokenStorage.setPersonId(personId);
-    }
-
-  getPersonId(): string | null {
-      return this.tokenStorage.getPersonId();
-    }
-
-  isPersonAuthenticated(): boolean {
-      return !!this.getPersonId();
-    }
+  private decodeBase64Url(value: string): string {
+    const base64 = value.replace(/-/g, '+').replace(/_/g, '/');
+    const padded = base64.padEnd(Math.ceil(base64.length / 4) * 4, '=');
+    return atob(padded);
+  }
 }
