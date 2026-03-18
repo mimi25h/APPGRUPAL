@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgIf } from '@angular/common';
-import { AuthService } from '../core/auth/auth.service';
-import { UsersService } from '../services/users.service';
+import { AuthService } from '../../core/auth/auth.service';
+import { UsersService } from '../../services/users.service';
 
 @Component({
   selector: 'app-users',

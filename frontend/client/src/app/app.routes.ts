@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { People } from './pages/people/people';
 import { Login } from './pages/login/login';
 import { Landing } from './pages/landing/landing';
-import { Users } from './users/users';
+import { Users } from './pages/users/users';
 import { AdminGuard } from './core/guards/admin.guard';
 
 export const routes: Routes = [
