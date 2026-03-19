@@ -1,6 +1,6 @@
-<h1 *ngIf="isAdmin">People creation centre</h1>
+<h1>People creation centre</h1>
 
-<form *ngIf="isAdmin" #personForm="ngForm" (ngSubmit)="createPerson()">
+<form #personForm="ngForm" (ngSubmit)="createPerson()">
 
   <!-- DOCUMENT -->
   <input
@@ -110,7 +110,7 @@
       </span>
 
       <button
-        *ngIf="isAdmin"
+
         class="delete-btn"
         (click)="deletePerson(person._id)">
         Delete
@@ -129,7 +129,7 @@
 </div>
 
 <div class="logout-container">
-  <button class="user-btn" *ngIf="isAdmin" type="button" (click)="goToUsers()">
+  <button class="user-btn" type="button" (click)="goToUsers()">
   Go to Users
 </button>
 </div>

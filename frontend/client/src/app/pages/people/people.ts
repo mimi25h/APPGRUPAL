@@ -23,8 +23,6 @@ export class People implements OnInit {
     phone_numbers: '',
   };
 
-  isAdmin = false; // Only true if a user token exists
-
   constructor(
     private peopleService: PeopleService,
     private cdr: ChangeDetectorRef,
@@ -32,20 +30,8 @@ export class People implements OnInit {
     private authService: AuthService,
   ) {}
 
-  ngOnInit(): void {
-    if (!this.authService.isAuthenticated()) {
-      this.router.navigate(['/login']);
-      return;
-    }
-
-    this.detectRole();
+  ngOnInit() {
     this.loadPeople();
-  }
-
-  // Check if a user is logged in and is admin
-  detectRole() {
-    const role = this.authService.getCurrentRoleFromToken();
-    this.isAdmin = role === 1;
   }
 
   loadPeople() {
@@ -61,8 +47,6 @@ export class People implements OnInit {
   }
 
   createPerson() {
-    if (!this.isAdmin) return;
-
     const payload = {
       ...this.newPerson,
       phone_numbers: this.newPerson.phone_numbers
@@ -88,8 +72,6 @@ export class People implements OnInit {
   }
 
   deletePerson(id: string) {
-    if (!this.isAdmin) return;
-
     this.peopleService.delete(id).subscribe({
       next: () => {
         this.people = this.people.filter((p) => p._id !== id);
@@ -109,8 +91,6 @@ export class People implements OnInit {
 
   // Navigate to Users page (admins only)
   goToUsers() {
-    if (this.isAdmin) {
-      this.router.navigate(['/users']);
-    }
+    this.router.navigate(['/users']);
   }
 }
