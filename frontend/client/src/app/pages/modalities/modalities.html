@@ -1,0 +1,48 @@
+<h1>Modalities</h1>
+
+<form #modalityForm="ngForm" (ngSubmit)="createModality()">
+
+  <!-- CODE MEANING -->
+  <input name="code_meaning" [(ngModel)]="newModality.code_meaning" required placeholder="Code Meaning"
+    #codeMeaning="ngModel">
+
+  <div *ngIf="codeMeaning.touched && codeMeaning.invalid">
+    <small *ngIf="codeMeaning.errors?.['required']">Code Meaning is required</small>
+  </div>
+
+  <!-- CODE VALUE -->
+  <input name="code_value" [(ngModel)]="newModality.code_value" required placeholder="Code Value"
+    #codeValue="ngModel">
+
+  <div *ngIf="codeValue.touched && codeValue.invalid">
+    <small *ngIf="codeValue.errors?.['required']">Code Value is required</small>
+  </div>
+
+  <button type="submit" [disabled]="modalityForm.invalid">
+    Create Modality
+  </button>
+
+</form>
+
+
+<div class="modalities-card">
+
+  <h1>List of Modalities</h1>
+
+  <ul class="modalities-list">
+
+    <li *ngFor="let modality of modalities()">
+
+      <span class="modality-name">
+        {{ modality.code_meaning }} {{ modality.code_value }}
+      </span>
+
+      <button *ngIf="isAdmin" class="delete-btn" (click)="deleteModality(modality._id)">
+        Delete
+      </button>
+
+    </li>
+
+  </ul>
+
+</div>
