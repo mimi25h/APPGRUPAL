@@ -34,7 +34,7 @@
     <li *ngFor="let modality of modalities()">
 
       <span class="modality-name">
-        {{ modality.code_meaning }} {{ modality.code_value }}
+        Code Meaning: {{ modality.code_meaning }} <br> Code Value: {{ modality.code_value }}
       </span>
 
       <button *ngIf="isAdmin" class="delete-btn" (click)="deleteModality(modality._id)">

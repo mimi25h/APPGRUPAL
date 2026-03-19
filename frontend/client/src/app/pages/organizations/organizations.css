@@ -85,3 +85,7 @@ h1 {
   padding: 10px 12px;
   border-bottom: 1px solid #eee;
 }
+
+.delete-btn {
+  width: auto;
+}

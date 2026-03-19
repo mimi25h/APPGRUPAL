@@ -32,7 +32,7 @@
     <li *ngFor="let organization of organizations()">
 
       <span class="organization-name">
-        {{ organization.name }}
+        Name: {{ organization.name }}
       </span>
 
       <button  class="delete-btn" (click)="deleteOrganization(organization._id)">
