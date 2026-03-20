@@ -68,7 +68,7 @@ h1 {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.modalities-card {
+.organizations-card {
   max-width: 500px;
   margin: 30px auto;
   padding: 30px;
@@ -77,7 +77,7 @@ h1 {
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
 }
 
-.modalities-list li {
+.organizations-list li {
   display: flex;
   justify-content: space-between;
   align-items: center;

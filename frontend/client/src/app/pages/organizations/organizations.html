@@ -1,0 +1,46 @@
+<h1>Organizations</h1>
+
+<form #organizationForm="ngForm" (ngSubmit)="createOrganization()">
+
+  <!-- ORGANIZATION NAME -->
+  <input name="name" [(ngModel)]="newOrganization.name" required placeholder="Organization Name"
+    #name="ngModel">
+
+  <div *ngIf="name.touched && name.invalid">
+    <small *ngIf="name.errors?.['required']">Organization Name is required</small>
+  </div>
+
+  <!-- SHORT NAME -->
+  <input name="short_name" [(ngModel)]="newOrganization.short_name"  placeholder="Short Name" #shortName="ngModel">
+
+  <!-- COUNTRY CODE -->
+  <input name="country_code" [(ngModel)]="newOrganization.country_code" placeholder="Country Code" #countryCode="ngModel">
+
+  <button type="submit" [disabled]="organizationForm.invalid">
+    Create Organization
+  </button>
+
+</form>
+
+
+<div class="organizations-card">
+
+  <h1>List of Organizations</h1>
+
+  <ul class="organizations-list">
+
+    <li *ngFor="let organization of organizations()">
+
+      <span class="organization-name">
+        Name: {{ organization.name }}
+      </span>
+
+      <button  class="delete-btn" (click)="deleteOrganization(organization._id)">
+        Delete
+      </button>
+
+    </li>
+
+  </ul>
+
+</div>
