@@ -16,8 +16,12 @@ interface Person {
 }
 
 type CreatePerson = Omit<Person, '_id' | 'phone_numbers'> & { phone_numbers?: string[] };
-
 type UpdatePerson = Partial<CreatePerson>;
+
+export interface DeletePersonResponse {
+  message: string;
+  logout: boolean;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -45,6 +49,6 @@ export class PeopleService {
   }
 
   delete(id: string) {
-    return this.http.delete<{ data: Person }>(`${this.api}/${id}`).pipe(map((res) => res.data));
+    return this.http.delete<DeletePersonResponse>(`${this.api}/${id}`);
   }
 }

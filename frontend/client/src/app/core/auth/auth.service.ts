@@ -100,4 +100,15 @@ export class AuthService {
     const padded = base64.padEnd(Math.ceil(base64.length / 4) * 4, '=');
     return atob(padded);
   }
+
+  deleteUser() {
+  const token = this.getToken();
+
+  return this.http.delete(`${API_BASE_URL}${API_ENDPOINTS.usersDeleteMe}`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+  }
+
 }

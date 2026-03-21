@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const { validationResult, matchedData } = require("express-validator");
-const Users = require("./modules/users/schemas");
+const Users = require("./modules/users/schemas.js");
 
 function validateRequest(req, res, next) {
   const errors = validationResult(req);

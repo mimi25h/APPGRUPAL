@@ -1,8 +1,9 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PeopleService } from '../../services/people.service';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { PeopleService } from '../../services/people.service';
+import type { DeletePersonResponse } from '../../services/people.service';
 import { AuthService } from '../../core/auth/auth.service';
 
 @Component({
@@ -23,7 +24,7 @@ export class People implements OnInit {
     phone_numbers: '',
   };
 
-  isAdmin = false; // Only true if a user token exists
+  isAdmin = false;
 
   constructor(
     private peopleService: PeopleService,
@@ -42,7 +43,6 @@ export class People implements OnInit {
     this.loadPeople();
   }
 
-  // Check if a user is logged in and is admin
   detectRole() {
     const role = this.authService.getCurrentRoleFromToken();
     this.isAdmin = role === 1;
@@ -91,9 +91,14 @@ export class People implements OnInit {
     if (!this.isAdmin) return;
 
     this.peopleService.delete(id).subscribe({
-      next: () => {
+      next: (res: DeletePersonResponse) => {
         this.people = this.people.filter((p) => p._id !== id);
         this.cdr.detectChanges();
+
+        if (res.logout) {
+          this.authService.logout();
+          this.router.navigate(['/login']);
+        }
       },
       error: (err) => {
         console.error('Delete failed:', err);
@@ -101,13 +106,11 @@ export class People implements OnInit {
     });
   }
 
-  // Logout clears the current session
   logout() {
     this.authService.logout();
     this.router.navigate(['/login']);
   }
 
-  // Navigate to Users page (admins only)
   goToUsers() {
     if (this.isAdmin) {
       this.router.navigate(['/users']);
