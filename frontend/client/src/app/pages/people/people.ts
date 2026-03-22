@@ -110,10 +110,4 @@ export class People implements OnInit {
     this.authService.logout();
     this.router.navigate(['/login']);
   }
-
-  goToUsers() {
-    if (this.isAdmin) {
-      this.router.navigate(['/users']);
-    }
-  }
 }

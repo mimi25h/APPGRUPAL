@@ -2,6 +2,43 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.2.
 
+## Team setup (important)
+
+To avoid version mismatch errors (for example Material style import errors), everyone should use the same Node/npm versions and lockfile.
+
+Check versions:
+
+```bash
+node -v   # expected: v24.12.0
+npm -v    # expected: 11.6.x
+```
+
+If you use nvm:
+
+```bash
+nvm use
+```
+
+Install dependencies using the lockfile:
+
+```bash
+npm ci
+```
+
+If your local dependencies are broken, clean and reinstall:
+
+```bash
+rm -rf node_modules package-lock.json
+npm install
+```
+
+PowerShell alternative:
+
+```powershell
+Remove-Item -Recurse -Force node_modules, package-lock.json
+npm install
+```
+
 ## Development server
 
 To start a local development server, run:

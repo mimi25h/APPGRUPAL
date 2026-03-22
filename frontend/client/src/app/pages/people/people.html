@@ -1,7 +1,6 @@
 <h1 *ngIf="isAdmin">People creation centre</h1>
 
 <form *ngIf="isAdmin" #personForm="ngForm" (ngSubmit)="createPerson()">
-
   <!-- DOCUMENT -->
   <input
     name="document"
@@ -10,7 +9,8 @@
     minlength="7"
     maxlength="20"
     placeholder="Document"
-    #document="ngModel">
+    #document="ngModel"
+  />
 
   <div *ngIf="document.touched && document.invalid">
     <small *ngIf="document.errors?.['required']">Document is required</small>
@@ -26,7 +26,8 @@
     minlength="2"
     maxlength="80"
     placeholder="First name"
-    #name01="ngModel">
+    #name01="ngModel"
+  />
 
   <div *ngIf="name01.touched && name01.invalid">
     <small *ngIf="name01.errors?.['required']">First name is required</small>
@@ -41,7 +42,8 @@
     minlength="2"
     maxlength="80"
     placeholder="Second name (optional)"
-    #name02="ngModel">
+    #name02="ngModel"
+  />
 
   <!-- FIRST SURNAME -->
   <input
@@ -51,7 +53,8 @@
     minlength="2"
     maxlength="80"
     placeholder="First surname"
-    #surname01="ngModel">
+    #surname01="ngModel"
+  />
 
   <!-- SECOND SURNAME -->
   <input
@@ -60,7 +63,8 @@
     minlength="2"
     maxlength="80"
     placeholder="Second surname (optional)"
-    #surname02="ngModel">
+    #surname02="ngModel"
+  />
 
   <!-- BIRTH DATE -->
   <input
@@ -68,14 +72,11 @@
     name="birth_date"
     [(ngModel)]="newPerson.birth_date"
     required
-    #birthDate="ngModel">
+    #birthDate="ngModel"
+  />
 
   <!-- GENDER -->
-  <select
-    name="gender"
-    [(ngModel)]="newPerson.gender"
-    #gender="ngModel">
-
+  <select name="gender" [(ngModel)]="newPerson.gender" #gender="ngModel">
     <option value="">Select gender (optional)</option>
     <option value="0">Male</option>
     <option value="1">Female</option>
@@ -88,48 +89,24 @@
     minlength="6"
     maxlength="20"
     placeholder="Phone numbers (comma separated)"
-    #phones="ngModel">
+    #phones="ngModel"
+  />
 
-  <button type="submit" [disabled]="personForm.invalid">
-    Create Person
-  </button>
-
+  <button type="submit" [disabled]="personForm.invalid">Create Person</button>
 </form>
 
-
 <div class="people-card">
-
   <h1>List of all people registered on the site</h1>
 
   <ul class="people-list">
-
     <li *ngFor="let person of people">
+      <span class="person-name"> {{ person.name_01 }} {{ person.surname_01 }} </span>
 
-      <span class="person-name">
-        {{ person.name_01 }} {{ person.surname_01 }}
-      </span>
-
-      <button
-        *ngIf="isAdmin"
-        class="delete-btn"
-        (click)="deletePerson(person._id)">
-        Delete
-      </button>
-
+      <button *ngIf="isAdmin" class="delete-btn" (click)="deletePerson(person._id)">Delete</button>
     </li>
-
   </ul>
-
 </div>
 
 <div class="logout-container">
-  <button class="logout-btn" (click)="logout()">
-    Logout
-  </button>
-</div>
-
-<div class="logout-container">
-  <button class="user-btn" *ngIf="isAdmin" type="button" (click)="goToUsers()">
-  Go to Users
-</button>
+  <button class="logout-btn" (click)="logout()">Logout</button>
 </div>

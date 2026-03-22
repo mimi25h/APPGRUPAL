@@ -2,7 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { OrganizationsService } from '../../services/organizations.service';
 import { AuthService } from '../../core/auth/auth.service';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-organizations',
@@ -15,6 +15,7 @@ export class Organizations {
   private authService = inject(AuthService);
 
   protected organizations = signal([] as any[]);
+  protected createError = signal('');
 
   newOrganization: any = {
     name: '',
@@ -37,7 +38,13 @@ export class Organizations {
     });
   }
 
-  createOrganization() {
+  createOrganization(form: NgForm) {
+    if (form.invalid) {
+      form.control.markAllAsTouched();
+      return;
+    }
+
+    this.createError.set('');
     this.organizationsService.create(this.newOrganization).subscribe({
       next: (res) => {
         this.organizations.update((organizations) => [...organizations, res]);
@@ -46,8 +53,13 @@ export class Organizations {
           short_name: '',
           country_code: '',
         };
+        form.resetForm(this.newOrganization);
       },
       error: (err) => {
+        const backendMessage = err?.error?.errors?.[0]?.msg;
+        this.createError.set(
+          backendMessage || 'No se pudo crear la organizacion. Revisa los campos.',
+        );
         console.error(err);
       },
     });

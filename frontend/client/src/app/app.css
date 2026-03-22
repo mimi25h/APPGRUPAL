@@ -1,0 +1,61 @@
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #113b57 0%, #1f5f80 65%, #2c7da0 100%);
+  color: #f5fbff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.brand {
+  color: inherit;
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin-right: 1.25rem;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.nav-links a {
+  color: #f5fbff;
+}
+
+.active-link {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.logout-btn {
+  background: #f9a03f;
+  color: #0f2533;
+  font-weight: 600;
+}
+
+.page-shell {
+  padding: 1rem;
+}
+
+@media (max-width: 900px) {
+  .topbar {
+    min-height: 64px;
+    height: auto;
+    padding: 0.75rem;
+  }
+
+  .nav-links {
+    width: 100%;
+    order: 3;
+  }
+}
