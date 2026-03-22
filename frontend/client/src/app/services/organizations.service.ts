@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { map } from 'rxjs';
 import { API_BASE_URL } from '../core/config/api.config';
 
+// Client-side organization model for API responses.
 interface Organization {
   _id: string;
   name: string;
@@ -19,10 +20,12 @@ type UpdateOrganization = Partial<CreateOrganization>;
   providedIn: 'root',
 })
 export class OrganizationsService {
+  // Base resource endpoint for organizations module.
   private http = inject(HttpClient);
   private api = `${API_BASE_URL}/api/organizations`;
 
   getAll() {
+    // Backend wraps payload in { data }, so map to raw array.
     return this.http.get<{ data: Organization[] }>(this.api).pipe(map((res) => res.data));
   }
 

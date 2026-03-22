@@ -11,6 +11,7 @@ import { FormsModule, NgForm } from '@angular/forms';
   styleUrl: './organizations.css',
 })
 export class Organizations {
+  // Service dependencies for data and auth context.
   private organizationsService = inject(OrganizationsService);
   private authService = inject(AuthService);
 
@@ -24,10 +25,12 @@ export class Organizations {
   };
 
   ngOnInit() {
+    // Load organizations on component initialization.
     this.loadOrganizations();
   }
 
   private loadOrganizations() {
+    // Fetches full organization list and stores it in signal state.
     this.organizationsService.getAll().subscribe({
       next: (res) => {
         this.organizations.set(res);
@@ -39,11 +42,13 @@ export class Organizations {
   }
 
   createOrganization(form: NgForm) {
+    // Prevent submission when client form validation fails.
     if (form.invalid) {
       form.control.markAllAsTouched();
       return;
     }
 
+    // Reset previous error and submit create request.
     this.createError.set('');
     this.organizationsService.create(this.newOrganization).subscribe({
       next: (res) => {
@@ -56,6 +61,7 @@ export class Organizations {
         form.resetForm(this.newOrganization);
       },
       error: (err) => {
+        // Prefer backend validator message when available.
         const backendMessage = err?.error?.errors?.[0]?.msg;
         this.createError.set(
           backendMessage || 'No se pudo crear la organizacion. Revisa los campos.',
@@ -66,6 +72,7 @@ export class Organizations {
   }
 
   deleteOrganization(id: string) {
+    // Deletes organization and updates list without full reload.
     this.organizationsService.delete(id).subscribe({
       next: (res) => {
         this.organizations.update((organizations) =>

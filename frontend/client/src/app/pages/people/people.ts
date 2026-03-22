@@ -14,6 +14,7 @@ import { AuthService } from '../../core/auth/auth.service';
   styleUrls: ['./people.css'],
 })
 export class People implements OnInit {
+  // In-memory list rendered by the template.
   people: any[] = [];
 
   newPerson: any = {
@@ -34,6 +35,7 @@ export class People implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // Guard route manually in case component is reached without a valid session.
     if (!this.authService.isAuthenticated()) {
       this.router.navigate(['/login']);
       return;
@@ -44,11 +46,13 @@ export class People implements OnInit {
   }
 
   detectRole() {
+    // Resolve current role to enable/disable admin actions in UI.
     const role = this.authService.getCurrentRoleFromToken();
     this.isAdmin = role === 1;
   }
 
   loadPeople() {
+    // Fetches people list and forces view refresh after async update.
     this.peopleService.getAll().subscribe({
       next: (res) => {
         this.people = res;
@@ -61,8 +65,10 @@ export class People implements OnInit {
   }
 
   createPerson() {
+    // Block non-admin users from creating records.
     if (!this.isAdmin) return;
 
+    // Backend expects phone numbers as array, split from comma-separated input.
     const payload = {
       ...this.newPerson,
       phone_numbers: this.newPerson.phone_numbers
@@ -88,6 +94,7 @@ export class People implements OnInit {
   }
 
   deletePerson(id: string) {
+    // Block non-admin users from deleting records.
     if (!this.isAdmin) return;
 
     this.peopleService.delete(id).subscribe({
@@ -95,6 +102,7 @@ export class People implements OnInit {
         this.people = this.people.filter((p) => p._id !== id);
         this.cdr.detectChanges();
 
+        // If current session user was deleted, force logout.
         if (res.logout) {
           this.authService.logout();
           this.router.navigate(['/login']);

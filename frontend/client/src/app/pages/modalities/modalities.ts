@@ -12,6 +12,7 @@ import { AuthService } from '../../core/auth/auth.service';
   styleUrls: ['./modalities.css'],
 })
 export class Modalities {
+  // Inject services using Angular's inject API.
   private modalitiesService = inject(ModalitiesService);
   private authService = inject(AuthService);
 
@@ -25,11 +26,13 @@ export class Modalities {
   isAdmin = false;
 
   ngOnInit() {
+    // Load initial list and compute role-based UI permissions.
     this.loadModalities();
     this.isAdmin = this.authService.getCurrentRoleFromToken() === 1;
   }
 
   private loadModalities() {
+    // Retrieves modalities and stores them in a reactive signal.
     this.modalitiesService.getAll().subscribe({
       next: (res) => {
         this.modalities.set(res);
@@ -41,6 +44,7 @@ export class Modalities {
   }
 
   createModality() {
+    // Creates a modality and updates local list optimistically.
     this.modalitiesService.create(this.newModality).subscribe({
       next: (res) => {
         this.modalities.update((modalities) => [...modalities, res]);
@@ -56,6 +60,7 @@ export class Modalities {
   }
 
   deleteModality(id: string) {
+    // Deletes a modality and removes it from local state.
     this.modalitiesService.delete(id).subscribe({
       next: (res) => {
         this.modalities.update((modalities) =>

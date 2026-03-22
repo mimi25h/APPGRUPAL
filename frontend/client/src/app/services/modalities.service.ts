@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { map } from 'rxjs';
 import { API_BASE_URL } from '../core/config/api.config';
 
+// Client-side modality model for API responses.
 interface Modality {
   _id: string;
   code_meaning: string;
@@ -18,10 +19,12 @@ type UpdateModality = Partial<CreateModality>;
   providedIn: 'root',
 })
 export class ModalitiesService {
+  // Base resource endpoint for modalities module.
   private http = inject(HttpClient);
   private api = `${API_BASE_URL}/api/modalities`;
 
   getAll() {
+    // Backend wraps payload in { data }, so map to raw array.
     return this.http.get<{ data: Modality[] }>(this.api).pipe(map((res) => res.data));
   }
 

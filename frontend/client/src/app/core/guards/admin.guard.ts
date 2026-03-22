@@ -6,6 +6,7 @@ import { AuthService } from '../auth/auth.service';
 @Injectable({
   providedIn: 'root',
 })
+// Route guard that enforces authenticated admin-only access.
 export class AdminGuard implements CanActivate {
   constructor(
     private authService: AuthService,

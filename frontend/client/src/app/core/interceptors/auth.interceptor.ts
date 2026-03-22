@@ -3,6 +3,7 @@ import { inject } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 
+// HTTP interceptor that adds Bearer token to protected requests and handles 401 cleanup.
 // Public endpoints that do not require an Authorization header
 const PUBLIC_ENDPOINTS = ['/auth/login', '/auth/bootstrap-admin'];
 

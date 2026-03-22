@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root',
 })
+// Thin wrapper around localStorage for JWT session persistence.
 export class TokenStorageService {
   private readonly tokenKey = 'token';
 

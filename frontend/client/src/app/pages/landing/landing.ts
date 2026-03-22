@@ -14,4 +14,5 @@ import { RouterModule } from '@angular/router';
   `,
   styleUrls: ['./landing.css'],
 })
+// Minimal public entry page that redirects users to login.
 export class Landing {}

@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
   imports: [FormsModule, NgIf],
 })
 export class Login {
+  // Form model fields bound from template.
   username = '';
   password = '';
 
@@ -22,10 +23,12 @@ export class Login {
     private router: Router,
     private authService: AuthService,
   ) {
+    // Detect pre-existing valid session.
     this.isLoggedIn = this.authService.isAuthenticated();
   }
 
   submitLogin(form: NgForm) {
+    // Basic client-side validation before calling backend.
     this.errorMessage = '';
 
     if (!form.valid) {
@@ -44,6 +47,7 @@ export class Login {
             this.isLoggedIn = true;
             const role = this.authService.getCurrentRoleFromToken();
 
+            // Route users by role after successful authentication.
             if (role === 1) {
               this.router.navigate(['/people']);
               return;
@@ -58,10 +62,12 @@ export class Login {
             this.authService.logout();
             this.router.navigate(['/login']);
           } else {
+            // Backend-level validation/auth errors.
             this.errorMessage = res.message || 'Invalid login.';
           }
         },
         error: (err) => {
+          // Network/server fallback message.
           this.errorMessage = err.error?.message || 'Server error';
         },
       });

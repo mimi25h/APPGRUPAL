@@ -17,6 +17,7 @@ import { UserRole } from './core/auth/auth.types';
   styleUrls: ['./app.css'],
 })
 export class App implements OnInit {
+  // Shared auth state used by top-level navigation.
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
@@ -26,6 +27,7 @@ export class App implements OnInit {
   protected currentRole: UserRole | null = null;
 
   ngOnInit(): void {
+    // Refresh auth state whenever navigation completes to keep menu visibility in sync.
     this.router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),
@@ -35,6 +37,7 @@ export class App implements OnInit {
       .subscribe(() => this.refreshSessionState());
   }
 
+  // Role helpers used by template conditionals.
   protected get isAdmin(): boolean {
     return this.currentRole === 1;
   }
@@ -44,12 +47,14 @@ export class App implements OnInit {
   }
 
   protected logout(): void {
+    // Centralized logout flow from global navbar.
     this.authService.logout();
     this.refreshSessionState();
     this.router.navigate(['/login']);
   }
 
   private refreshSessionState(): void {
+    // Resolve current auth/role values from token storage.
     this.isAuthenticated = this.authService.isAuthenticated();
     this.currentRole = this.isAuthenticated ? this.authService.getCurrentRoleFromToken() : null;
   }

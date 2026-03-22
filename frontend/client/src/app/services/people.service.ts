@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs';
 import { API_BASE_URL } from '../core/config/api.config';
 
+// Client-side person model for API responses.
 interface Person {
   _id: string;
   document: string;
@@ -27,10 +28,12 @@ export interface DeletePersonResponse {
   providedIn: 'root',
 })
 export class PeopleService {
+  // Base resource endpoint for people module.
   private http = inject(HttpClient);
   private api = `${API_BASE_URL}/api/people`;
 
   getAll() {
+    // Backend wraps payload in { data }, so map to raw array.
     return this.http.get<{ data: Person[] }>(this.api).pipe(map((res) => res.data));
   }
 
@@ -49,6 +52,7 @@ export class PeopleService {
   }
 
   delete(id: string) {
+    // Delete returns a custom response with logout flag.
     return this.http.delete<DeletePersonResponse>(`${this.api}/${id}`);
   }
 }
