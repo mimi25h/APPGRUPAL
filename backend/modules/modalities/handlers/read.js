@@ -1,5 +1,8 @@
+// Handler: retrieves one or all Modality documents from the database.
 const Modality = require("../schemas");
 
+// If req.params.id is present, fetches a single modality by ID.
+// Otherwise, returns the full list sorted by newest first.
 async function readModalities(req, res) {
   try {
     if (req.params.id) {

@@ -1,5 +1,8 @@
+// Handler: updates an existing Modality document by ID.
 const Modality = require("../schemas");
 
+// Applies the validated partial body from req.parsedBody to the modality record.
+// Returns the updated document or 404 if not found.
 async function updateModality(req, res) {
   try {
     const updated = await Modality.findByIdAndUpdate(

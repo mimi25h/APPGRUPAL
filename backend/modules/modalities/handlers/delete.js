@@ -1,5 +1,8 @@
+// Handler: deletes a Modality document by ID.
 const Modality = require("../schemas");
 
+// Finds and removes the modality from the database.
+// Returns the deleted document or 404 if not found.
 async function deleteModality(req, res) {
   try {
     const deleted = await Modality.findByIdAndDelete(req.params.id);

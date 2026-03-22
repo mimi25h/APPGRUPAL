@@ -1,5 +1,8 @@
+// Handler: deletes a User document by ID.
 const Users = require("../schemas");
 
+// Finds and removes the user from the database (response excludes password).
+// Returns 404 if no user was found with the given ID.
 async function deleteUser(req, res) {
   try {
     const deleted = await Users.findByIdAndDelete(req.params.id).select(

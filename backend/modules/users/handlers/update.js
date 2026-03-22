@@ -1,3 +1,5 @@
+// Handler: updates an existing User document by ID.
+// Validates linked person if changed, checks for duplicate conflicts, and rehashes password if updated.
 const argon2 = require("argon2");
 const Users = require("../schemas");
 const People = require("../../people/schemas");
@@ -5,6 +7,7 @@ const People = require("../../people/schemas");
 async function updateUser(req, res) {
   try {
     const payload = { ...req.parsedBody };
+    // Verify the target user exists before applying any changes.
     const currentUser = await Users.findById(req.params.id);
 
     if (!currentUser) {
@@ -13,6 +16,7 @@ async function updateUser(req, res) {
         .json({ ok: false, message: "Usuario no encontrado" });
     }
 
+    // If fk_person is being changed, validate the new person exists and is not already linked.
     if (payload.fk_person) {
       const person = await People.findById(payload.fk_person);
       if (!person) {
@@ -34,6 +38,7 @@ async function updateUser(req, res) {
       }
     }
 
+    // If username or email is being changed, check for conflicts with other existing users.
     if (payload.username || payload.email) {
       const duplicated = await Users.findOne({
         _id: { $ne: req.params.id },
@@ -51,6 +56,7 @@ async function updateUser(req, res) {
       }
     }
 
+    // If a new password is provided, hash it with Argon2 before saving.
     if (payload.password) {
       payload.password = await argon2.hash(payload.password);
     }

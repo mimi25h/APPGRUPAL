@@ -1,5 +1,9 @@
+// Database connection utility.
+// Provides a function to establish a MongoDB connection using Mongoose.
 const mongoose = require("mongoose");
 
+// Attempts to connect to MongoDB with the given URI.
+// Returns { ok: true, dbName } on success, or { ok: false, error } on failure.
 async function connectToMongo(uri) {
   try {
     if (!uri) {
