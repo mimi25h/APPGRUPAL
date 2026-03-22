@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const { validationResult, matchedData } = require("express-validator");
+const Users = require("./modules/users/schemas.js");
 
 function validateRequest(req, res, next) {
   const errors = validationResult(req);
@@ -35,6 +36,11 @@ function verifyToken(req, res, next) {
     if (err) {
       return res.status(401).json({ message: "No autorizado" });
     }
+
+    if (!Users.findById(decoded.id)) {
+      return res.status(401).json({ message: "Usuario no encontrado" });
+    }
+
     req.token = decoded;
     next();
   });

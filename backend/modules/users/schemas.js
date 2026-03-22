@@ -22,7 +22,8 @@ const usersSchema = new mongoose.Schema(
     methods: {
       getJWTpayload() {
         return {
-          id: this._id,
+          userId: this._id,
+          personId: this.fk_person,
           role: this.role,
           settings: this.settings,
         };
