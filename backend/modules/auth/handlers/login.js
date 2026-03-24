@@ -11,37 +11,63 @@ const loginValidators = [
   body("password").isString().trim().notEmpty(),
 ];
 
-// Looks up the user by username, verifies the password with Argon2,
-// and signs a JWT token valid for 1 hour upon successful authentication.
 async function login(req, res) {
-  const { username, password } = req.parsedBody;
-  const jwtSecret = process.env.JWT_SECRET;
+  console.log("LOGIN HIT");
+  try {
+    const { username, password } = req.body;
+    const jwtSecret = process.env.JWT_SECRET;
 
-  if (!jwtSecret) {
+    if (!jwtSecret) {
+      return res.status(500).json({
+        ok: false,
+        message:
+          "Configuracion incompleta: falta JWT_SECRET en variables de entorno",
+      });
+    }
+
+    if (!username || !password) {
+      return res.status(400).json({
+        ok: false,
+        message: "Faltan credenciales",
+      });
+    }
+
+    const user = await users.findOne({ username });
+
+    // ✅ FIRST check user exists
+    if (!user) {
+      return res.status(401).json({
+        ok: false,
+        message: "Credenciales inválidas",
+      });
+    }
+
+    // ✅ THEN verify password (safe now)
+    const validPassword = await argon2.verify(user.password, password);
+
+    if (!validPassword) {
+      return res.status(401).json({
+        ok: false,
+        message: "Credenciales inválidas",
+      });
+    }
+
+    const token = jwt.sign(user.getJWTpayload(), jwtSecret, {
+      expiresIn: "1h",
+    });
+
+    return res.json({
+      ok: true,
+      data: { token },
+    });
+
+  } catch (err) {
+    console.error("LOGIN ERROR:", err);
     return res.status(500).json({
       ok: false,
-      message:
-        "Configuracion incompleta: falta JWT_SECRET en variables de entorno",
+      message: "Error interno del servidor",
     });
   }
-
-  const user = await users.findOne({ username });
-
-  if (!user || !(await argon2.verify(user.password, password))) {
-    return res.status(401).json({
-      ok: false,
-      message: "Credenciales inválidas",
-    });
-  }
-
-  const token = jwt.sign(user.getJWTpayload(), jwtSecret, {
-    expiresIn: "1h",
-  });
-
-  return res.json({
-    ok: true,
-    data: { token },
-  });
 }
 
 module.exports = {
