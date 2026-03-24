@@ -1,0 +1,35 @@
+# Use an official Node.js runtime as the base image.
+FROM node:24
+
+# Attach image metadata for traceability and maintenance.
+LABEL version="1.0.0"
+LABEL maintainer="opendicom <opendicom@gmail.com>"
+LABEL author="Mia <mimiscele11@gmail.com>"
+LABEL description="app grupal"
+
+
+ENV NODE_ENV=production
+
+
+EXPOSE 5000
+
+# Set the working directory inside the container.
+WORKDIR /app
+
+# Copy dependency manifests first to leverage Docker build cache.
+COPY package*.json ./
+
+# Install only production dependencies.
+RUN npm install --omit=dev
+
+# Copy the full backend source code into the image.
+COPY . .
+
+# Copy container startup script and place it at the app root.
+COPY ./docker/entrypoint.sh ./entrypoint.sh
+
+
+RUN chmod 755 ./entrypoint.sh
+
+# Start the container through the entrypoint script.
+ENTRYPOINT ["./entrypoint.sh"]

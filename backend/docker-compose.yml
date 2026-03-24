@@ -1,12 +1,44 @@
+# Define multi-container application services.
 services:
+  # Backend API service.
+  backend:
+    # Stable, readable container name.
+    container_name: appgrupal_backend
+    # Build image from local backend context and Dockerfile path.
+    build:
+      context: .
+      dockerfile: docker/dockerfile
+    # Publish backend port to host.
+    ports:
+      - "5000:5000"
+    # Load environment values from file (including JWT_SECRET).
+    env_file:
+      - ./config/.env
+    # Runtime overrides and service-to-service connection values.
+    environment:
+      HTTP_PORT: 5000
+      MONGO_URI: mongodb://mongodb:27017/appgrupal
+    # Start backend after MongoDB service is created.
+    depends_on:
+      - mongodb
+    # Keep container up unless explicitly stopped.
+    restart: unless-stopped
+
+  # MongoDB database service.
   mongodb:
-    container_name: appAuth_container
-    image: mongo:latest
+    # Stable, readable container name.
+    container_name: appgrupal_mongodb
+    # Pin image major/minor line to avoid unexpected latest changes.
+    image: mongo:8.0
+    # Persist MongoDB data and config on host folders.
     volumes:
       - ./mongodb_data:/data/db
       - ./mongodb_config:/data/configdb
+    # Publish MongoDB port to host.
     ports:
-      - 27017:27017
+      - "27017:27017"
+    # Configure timezone inside the MongoDB container.
     environment:
       TZ: "America/Argentina/Buenos_Aires"
+    # Keep container up unless explicitly stopped.
     restart: unless-stopped
