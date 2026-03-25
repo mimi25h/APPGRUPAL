@@ -1,0 +1,64 @@
+<h1>Editar organizacion</h1>
+
+<p *ngIf="loading()">Cargando organizacion...</p>
+<p *ngIf="loadError()">{{ loadError() }}</p>
+
+<form
+	*ngIf="!loading() && !loadError()"
+	#organizationForm="ngForm"
+	(ngSubmit)="updateOrganization(organizationForm)"
+>
+	<input
+		name="name"
+		[(ngModel)]="organization.name"
+		required
+		minlength="2"
+		maxlength="120"
+		placeholder="Organization Name"
+		#name="ngModel"
+	/>
+
+	<div *ngIf="name.touched && name.invalid">
+		<small *ngIf="name.errors?.['required']">Organization Name is required</small>
+		<small *ngIf="name.errors?.['minlength']"
+			>Organization Name must have at least 2 characters</small
+		>
+		<small *ngIf="name.errors?.['maxlength']">Organization Name max length is 120 characters</small>
+	</div>
+
+	<input
+		name="short_name"
+		[(ngModel)]="organization.short_name"
+		minlength="2"
+		maxlength="30"
+		placeholder="Short Name"
+		#shortName="ngModel"
+	/>
+	<div *ngIf="shortName.touched && shortName.invalid">
+		<small *ngIf="shortName.errors?.['minlength']">Short Name must have at least 2 characters</small>
+		<small *ngIf="shortName.errors?.['maxlength']">Short Name max length is 30 characters</small>
+	</div>
+
+	<input
+		name="country_code"
+		[(ngModel)]="organization.country_code"
+		minlength="2"
+		maxlength="3"
+		pattern="[A-Za-z]+"
+		placeholder="Country Code (ej: MX)"
+		#countryCode="ngModel"
+	/>
+	<div *ngIf="countryCode.touched && countryCode.invalid">
+		<small *ngIf="countryCode.errors?.['minlength']">Country Code must have 2 or 3 letters</small>
+		<small *ngIf="countryCode.errors?.['maxlength']">Country Code must have 2 or 3 letters</small>
+		<small *ngIf="countryCode.errors?.['pattern']">Country Code must contain only letters</small>
+	</div>
+
+	<button type="submit" [disabled]="organizationForm.invalid">Guardar cambios</button>
+</form>
+
+<p *ngIf="updateError()">{{ updateError() }}</p>
+
+<p>
+	<a [routerLink]="['/organizations']">Volver al listado</a>
+</p>

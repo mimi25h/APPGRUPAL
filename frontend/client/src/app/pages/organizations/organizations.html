@@ -64,6 +64,7 @@
     <li *ngFor="let organization of organizations()">
       <span class="organization-name"> Name: {{ organization.name }} </span>
 
+      <a [routerLink]="['/organizations', organization._id, 'edit']">Edit</a>
       <button class="delete-btn" (click)="deleteOrganization(organization._id)">Delete</button>
     </li>
   </ul>

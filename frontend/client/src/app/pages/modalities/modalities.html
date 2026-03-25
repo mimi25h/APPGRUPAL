@@ -40,6 +40,7 @@
         Code Value: {{ modality.code_value }}
       </span>
 
+      <a *ngIf="isAdmin" [routerLink]="['/modalities', modality._id, 'edit']">Edit</a>
       <button *ngIf="isAdmin" class="delete-btn" (click)="deleteModality(modality._id)">
         Delete
       </button>
