@@ -1,9 +1,13 @@
+// Input validation rules for the Organization resource.
+// Provides reusable validator builder functions for create and update operations.
 const { body, param } = require("express-validator");
 
+// Validates that the :id route parameter is a valid MongoDB ObjectId.
 const organizationIdValidator = [
   param("id").isMongoId().withMessage("id debe ser un ObjectId valido"),
 ];
 
+// Validates the name field (required on create, optional on update; 2-120 chars).
 function nameValidator(isUpdate = false) {
   const validator = body("name");
   if (isUpdate) {
@@ -18,6 +22,7 @@ function nameValidator(isUpdate = false) {
     .withMessage("name debe tener entre 2 y 120 caracteres");
 }
 
+// Validates the optional short_name abbreviation (2-30 chars).
 function shortNameValidator() {
   return body("short_name")
     .optional({ values: "falsy" })
@@ -26,6 +31,7 @@ function shortNameValidator() {
     .withMessage("short_name debe tener entre 2 y 30 caracteres");
 }
 
+// Validates the optional country_code (2-3 uppercase alphabetic characters).
 function countryCodeValidator() {
   return body("country_code")
     .optional({ values: "falsy" })
@@ -37,6 +43,7 @@ function countryCodeValidator() {
     .toUpperCase();
 }
 
+// Validates the optional status field as a boolean.
 function statusValidator() {
   return body("status")
     .optional()
@@ -45,6 +52,7 @@ function statusValidator() {
     .toBoolean();
 }
 
+// Assembles the full array of validators for create or update operations.
 function buildOrganizationValidators(isUpdate = false) {
   return [
     nameValidator(isUpdate),
@@ -54,8 +62,10 @@ function buildOrganizationValidators(isUpdate = false) {
   ];
 }
 
+// Validator set for creating an organization (all required fields enforced).
 const createOrganizationValidator = buildOrganizationValidators();
 
+// Validator set for updating an organization (all fields optional, at least one must be present).
 const updateOrganizationValidator = [
   body()
     .custom((value) => Object.keys(value || {}).length > 0)

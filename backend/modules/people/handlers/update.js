@@ -1,5 +1,8 @@
+// Handler: updates an existing People (person) document by ID.
 const People = require("../schemas");
 
+// Applies the validated partial body from req.parsedBody to the person record.
+// Returns the updated document or 404 if not found.
 async function updatePeople(req, res) {
   try {
     const updated = await People.findByIdAndUpdate(

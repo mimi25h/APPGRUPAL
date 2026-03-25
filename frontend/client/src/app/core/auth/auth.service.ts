@@ -10,10 +10,12 @@ import { TokenStorageService } from './token-storage.service';
   providedIn: 'root',
 })
 export class AuthService {
+  // HTTP client and token storage abstraction used by auth flows.
   private readonly http = inject(HttpClient);
   private readonly tokenStorage = inject(TokenStorageService);
 
   loginUser(payload: UserLoginRequest) {
+    // Calls login endpoint and persists JWT if the response is successful.
     return this.http
       .post<ApiResponse<UserLoginData>>(`${API_BASE_URL}${API_ENDPOINTS.usersLogin}`, payload)
       .pipe(
@@ -26,6 +28,7 @@ export class AuthService {
       );
   }
 
+  // Clears current session token.
   logout(): void {
     this.tokenStorage.clearSession();
   }
@@ -35,11 +38,13 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
+    // No token means no active session.
     const token = this.tokenStorage.getToken();
     if (!token) {
       return false;
     }
 
+    // Invalid token format/payload is treated as an expired session.
     const payload = this.getTokenPayload();
     if (!payload) {
       this.tokenStorage.clearSession();
@@ -54,6 +59,7 @@ export class AuthService {
     const nowInSeconds = Math.floor(Date.now() / 1000);
     const isValid = payload.exp > nowInSeconds;
 
+    // Remove stale token when expiration is reached.
     if (!isValid) {
       this.tokenStorage.clearSession();
     }
@@ -76,6 +82,7 @@ export class AuthService {
     return payload?.personId ?? null;
   }
 
+  // Decodes JWT payload section (Base64URL) and parses it into a typed object.
   private getTokenPayload(): JwtPayload | null {
     const token = this.tokenStorage.getToken();
     if (!token) {
@@ -95,6 +102,7 @@ export class AuthService {
     }
   }
 
+  // Converts Base64URL into plain Base64 so browser atob can decode it.
   private decodeBase64Url(value: string): string {
     const base64 = value.replace(/-/g, '+').replace(/_/g, '/');
     const padded = base64.padEnd(Math.ceil(base64.length / 4) * 4, '=');
@@ -102,13 +110,13 @@ export class AuthService {
   }
 
   deleteUser() {
-  const token = this.getToken();
+    // Sends authenticated delete request for current user endpoint.
+    const token = this.getToken();
 
-  return this.http.delete(`${API_BASE_URL}${API_ENDPOINTS.usersDeleteMe}`, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  });
+    return this.http.delete(`${API_BASE_URL}${API_ENDPOINTS.usersDeleteMe}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
   }
-
 }

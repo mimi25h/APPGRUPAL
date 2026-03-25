@@ -6,6 +6,7 @@ import { AuthService } from '../auth/auth.service';
 @Injectable({
   providedIn: 'root',
 })
+// Route guard that allows any authenticated user role.
 export class AuthGuard implements CanActivate {
   constructor(
     private authService: AuthService,

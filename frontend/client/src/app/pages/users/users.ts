@@ -13,6 +13,7 @@ import { UsersService } from '../../services/users.service';
   styleUrls: ['./users.css'],
 })
 export class Users {
+  // Form model for creating a user linked to an existing person.
   fk_person = '';
   username = '';
   email = '';
@@ -28,6 +29,7 @@ export class Users {
   ) {}
 
   ngOnInit() {
+    // Resolve session context and enforce admin-only access for this page.
     this.token = this.authService.getToken() ?? '';
     this.currentRole = this.authService.getCurrentRoleFromToken();
 
@@ -42,6 +44,7 @@ export class Users {
   }
 
   createUser(form: NgForm) {
+    // Only valid form submissions from admin users are allowed.
     if (!form.valid || this.currentRole !== 1) {
       return;
     }
@@ -52,6 +55,7 @@ export class Users {
       return;
     }
 
+    // Sends create request and clears form model on success.
     this.usersService
       .create({
         fk_person: fk,
@@ -72,6 +76,7 @@ export class Users {
   }
 
   goToPeople() {
+    // Convenience navigation back to people management.
     this.router.navigate(['/people']);
   }
 

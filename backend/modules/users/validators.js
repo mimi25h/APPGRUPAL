@@ -1,9 +1,13 @@
+// Input validation rules for the Users resource.
+// Provides reusable validator builder functions for create and update operations.
 const { body, param } = require("express-validator");
 
+// Validates that the :id route parameter is a valid MongoDB ObjectId.
 const userIdValidator = [
   param("id").isMongoId().withMessage("id debe ser un ObjectId valido"),
 ];
 
+// Validates the fk_person field (must be a valid ObjectId; required on create).
 function fkPersonValidator(isUpdate = false) {
   const validator = body("fk_person");
   if (isUpdate) {
@@ -17,6 +21,7 @@ function fkPersonValidator(isUpdate = false) {
     .withMessage("fk_person debe ser un ObjectId valido");
 }
 
+// Validates the username field (3-30 chars; required on create).
 function usernameValidator(isUpdate = false) {
   const validator = body("username");
   if (isUpdate) {
@@ -31,6 +36,7 @@ function usernameValidator(isUpdate = false) {
     .withMessage("username debe tener entre 3 y 30 caracteres");
 }
 
+// Validates the password field (minimum 6 chars; required on create).
 function passwordValidator(isUpdate = false) {
   const validator = body("password");
   if (isUpdate) {
@@ -45,6 +51,7 @@ function passwordValidator(isUpdate = false) {
     .withMessage("password debe tener al menos 6 caracteres");
 }
 
+// Validates and normalizes the email field (required on create).
 function emailValidator(isUpdate = false) {
   const validator = body("email");
   if (isUpdate) {
@@ -60,6 +67,7 @@ function emailValidator(isUpdate = false) {
     .normalizeEmail();
 }
 
+// Validates the role field: must be 1 (Admin) or 2 (Viewer); required on create.
 function roleValidator(isUpdate = false) {
   const validator = body("role");
   if (isUpdate) {
@@ -76,6 +84,7 @@ function roleValidator(isUpdate = false) {
     .toInt();
 }
 
+// Validates the optional settings object.
 function settingsValidator() {
   return body("settings")
     .optional()
@@ -83,6 +92,7 @@ function settingsValidator() {
     .withMessage("settings debe ser un objeto");
 }
 
+// Validates the optional language preference within settings (2-20 chars).
 function settingsLanguageValidator() {
   return body("settings.language")
     .optional({ values: "falsy" })
@@ -91,6 +101,7 @@ function settingsLanguageValidator() {
     .withMessage("settings.language debe tener entre 2 y 20 caracteres");
 }
 
+// Validates the optional theme preference within settings (3-20 chars).
 function settingsThemeValidator() {
   return body("settings.theme")
     .optional({ values: "falsy" })
@@ -99,6 +110,7 @@ function settingsThemeValidator() {
     .withMessage("settings.theme debe tener entre 3 y 20 caracteres");
 }
 
+// Validates the optional status field as a boolean.
 function statusValidator() {
   return body("status")
     .optional()
@@ -107,6 +119,7 @@ function statusValidator() {
     .toBoolean();
 }
 
+// Assembles the full array of validators for create or update operations.
 function buildUserValidators(isUpdate = false) {
   return [
     fkPersonValidator(isUpdate),
@@ -121,8 +134,10 @@ function buildUserValidators(isUpdate = false) {
   ];
 }
 
+// Validator set for creating a user (all required fields enforced).
 const createUserValidator = buildUserValidators();
 
+// Validator set for updating a user (all fields optional, at least one must be present).
 const updateUserValidator = [
   body()
     .custom((value) => Object.keys(value || {}).length > 0)

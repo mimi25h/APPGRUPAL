@@ -1,1 +1,23 @@
-<router-outlet></router-outlet>
+<mat-toolbar class="topbar">
+  <a class="brand" routerLink="/">APPGRUPAL</a>
+
+  <nav class="nav-links" *ngIf="isAuthenticated">
+    <a mat-button routerLink="/people" routerLinkActive="active-link" *ngIf="isAdmin">People</a>
+    <a mat-button routerLink="/users" routerLinkActive="active-link" *ngIf="isAdmin">Users</a>
+    <a mat-button routerLink="/organizations" routerLinkActive="active-link" *ngIf="isAdmin">
+      Organizations
+    </a>
+    <a mat-button routerLink="/modalities" routerLinkActive="active-link">Modalities</a>
+  </nav>
+
+  <span class="spacer"></span>
+
+  <button mat-stroked-button routerLink="/login" *ngIf="!isAuthenticated">Login</button>
+  <button mat-flat-button class="logout-btn" *ngIf="isAuthenticated" (click)="logout()">
+    Logout
+  </button>
+</mat-toolbar>
+
+<main class="page-shell">
+  <router-outlet></router-outlet>
+</main>

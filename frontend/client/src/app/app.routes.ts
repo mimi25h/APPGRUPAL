@@ -8,6 +8,8 @@ import { AuthGuard } from './core/guards/auth-guard';
 import { AdminGuard } from './core/guards/admin.guard';
 import { Organizations } from './pages/organizations/organizations';
 
+// Application route table.
+// Separates public routes, admin-only routes, and authenticated routes.
 export const routes: Routes = [
   // Public routes
   { path: '', component: Landing },

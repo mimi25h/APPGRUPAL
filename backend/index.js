@@ -1,17 +1,19 @@
+// Application entry point.
+// Loads environment configuration and starts the HTTP server.
 const mainServer = require("./main.server");
 const { loadConfig } = require("./config/env");
 
 function runServer() {
   try {
-    // Valida que exista el archivo de configuracion requerido y que existan las variables de entorno.
+    // Validates that the .env config file exists and all required environment variables are set.
     loadConfig();
 
-    // Inicia el servidor.
+    // Initializes and starts the Express HTTP server.
     mainServer();
   } catch (err) {
     console.error(err.message);
   }
 }
 
-// Run server.
+// Bootstrap: run the server on startup.
 runServer();

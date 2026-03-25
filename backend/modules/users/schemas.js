@@ -1,5 +1,9 @@
+// Mongoose schema and model for the Users resource.
+// Represents a system user linked to a person, with credentials, role, preferences, and status.
 const mongoose = require("mongoose");
 
+// Schema fields: fk_person (reference to People), username, hashed password, email,
+// role (1=Admin, 2=Viewer), settings (language/theme preferences), and active status.
 const usersSchema = new mongoose.Schema(
   {
     fk_person: {
@@ -20,6 +24,7 @@ const usersSchema = new mongoose.Schema(
   },
   {
     methods: {
+      // Returns the payload object to be signed into the JWT token.
       getJWTpayload() {
         return {
           userId: this._id,

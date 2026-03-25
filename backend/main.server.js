@@ -1,29 +1,33 @@
+// Main server configuration.
+// Sets up Express, connects to MongoDB, registers global middlewares, and mounts module routes.
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const { connectToMongo } = require("./config/db");
 
-// Middlewares
+// Import shared middlewares (JWT token verification).
 const { verifyToken } = require("./main.middlewares");
 
-// Cargar rutas de módulos.
+// Import route handlers for each resource module.
 const AuthRouter = require("./modules/auth/routes");
 const peopleRoutes = require("./modules/people/routes");
 const usersRoutes = require("./modules/users/routes");
 const organizationsRoutes = require("./modules/organizations/routes");
 const modalitiesRoutes = require("./modules/modalities/routes");
 
+// Flag to track whether MongoDB connected successfully at startup.
 let mongoOk = false;
 
 function mainServer() {
   const HTTP_PORT = process.env.HTTP_PORT || 3000;
   const app = express();
 
+  // Apply global middlewares: CORS support, JSON body parsing, and URL-encoded form parsing.
   app.use(cors());
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
-  // Conectar a MongoDB al iniciar el servidor.
+  // Establish MongoDB connection asynchronously when the server starts.
   (async () => {
     try {
       const result = await connectToMongo(process.env.MONGO_URI);
@@ -40,7 +44,7 @@ function mainServer() {
     }
   })();
 
-  // Health endpoint (público).
+  // Public health check endpoint — returns server status and MongoDB connection details.
   app.get("/", (req, res) => {
     const estadoConexion = mongoose.connection.readyState;
     const estados = {
@@ -83,13 +87,13 @@ function mainServer() {
     }
   });
 
-  // Rutas de autenticación (públicas).
+  // Public authentication routes (login, bootstrap-admin) — no token required.
   app.use("/auth", AuthRouter);
 
-  // No permitir usuarios no autorizados a otras rutas.
+  // Apply JWT verification middleware — all routes registered after this point are protected.
   app.use(verifyToken);
 
-  // Rutas de módulos
+  // Protected API routes — each resource module is mounted under /api/.
   app.use("/api/people", peopleRoutes);
   app.use("/api/users", usersRoutes);
   app.use("/api/organizations", organizationsRoutes);

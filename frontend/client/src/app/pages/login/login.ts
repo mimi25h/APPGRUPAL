@@ -42,7 +42,21 @@ export class Login {
         next: (res) => {
           if (res.ok && res.data) {
             this.isLoggedIn = true;
-            this.router.navigate(['/people']);
+            const role = this.authService.getCurrentRoleFromToken();
+
+            if (role === 1) {
+              this.router.navigate(['/people']);
+              return;
+            }
+
+            if (role === 2) {
+              this.router.navigate(['/modalities']);
+              return;
+            }
+
+            this.errorMessage = 'Role not allowed.';
+            this.authService.logout();
+            this.router.navigate(['/login']);
           } else {
             this.errorMessage = res.message || 'Invalid login.';
           }

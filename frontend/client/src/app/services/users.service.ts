@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { map } from 'rxjs';
 import { API_BASE_URL } from '../core/config/api.config';
 
+// Client-side user model for API responses.
 interface User {
   _id: string;
   fk_person: string;
@@ -27,10 +28,12 @@ type UpdateUser = Partial<CreateUser>;
   providedIn: 'root',
 })
 export class UsersService {
+  // Base resource endpoint for users module.
   private http = inject(HttpClient);
   private api = `${API_BASE_URL}/api/users`;
 
   getAll() {
+    // Backend wraps payload in { data }, so map to raw array.
     return this.http.get<{ data: User[] }>(this.api).pipe(map((res) => res.data));
   }
 

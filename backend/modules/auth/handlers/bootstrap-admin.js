@@ -1,9 +1,14 @@
+// Bootstrap admin handler for initial system setup.
+// Creates the first admin user (person + user account) when the database has no existing users.
+// This endpoint is automatically disabled once any user is present.
 const { body } = require("express-validator");
 const argon2 = require("argon2");
 const jwt = require("jsonwebtoken");
 const People = require("../../people/schemas");
 const Users = require("../../users/schemas");
 
+// Input validators for the full bootstrap-admin request body.
+// Validates person fields (document, names, birth date), plus username, password, and email.
 const bootstrapAdminValidators = [
   body("person.document")
     .isString()
@@ -75,6 +80,8 @@ const bootstrapAdminValidators = [
   body("email").isEmail().withMessage("email no es valido").normalizeEmail(),
 ];
 
+// Creates the initial admin: checks no users exist, validates no duplicate document/username/email,
+// creates the person and user records with a hashed password (role=1), and returns a JWT token.
 async function bootstrapAdmin(req, res) {
   try {
     const jwtSecret = process.env.JWT_SECRET;
@@ -86,6 +93,7 @@ async function bootstrapAdmin(req, res) {
       });
     }
 
+    // Block bootstrap if any user already exists in the database.
     const usersCount = await Users.countDocuments();
     if (usersCount > 0) {
       return res.status(409).json({
@@ -97,6 +105,7 @@ async function bootstrapAdmin(req, res) {
 
     const payload = req.parsedBody;
 
+    // Check for duplicate person by document number.
     const duplicatedByDocument = await People.findOne({
       document: payload.person.document,
     });
@@ -108,6 +117,7 @@ async function bootstrapAdmin(req, res) {
       });
     }
 
+    // Check for duplicate username or email before creating the user.
     const duplicatedUser = await Users.findOne({
       $or: [{ username: payload.username }, { email: payload.email }],
     });
@@ -119,6 +129,7 @@ async function bootstrapAdmin(req, res) {
       });
     }
 
+    // Create the person record and the admin user with a hashed password and role 1 (Admin).
     const createdPerson = await People.create(payload.person);
 
     const createdUser = await Users.create({
@@ -129,6 +140,7 @@ async function bootstrapAdmin(req, res) {
       role: 1,
     });
 
+    // Sign a JWT token and return the created records (password field excluded from response).
     const token = jwt.sign(createdUser.getJWTpayload(), jwtSecret, {
       expiresIn: "1h",
     });

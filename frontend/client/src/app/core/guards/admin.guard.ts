@@ -6,6 +6,7 @@ import { AuthService } from '../auth/auth.service';
 @Injectable({
   providedIn: 'root',
 })
+// Route guard that enforces authenticated admin-only access.
 export class AdminGuard implements CanActivate {
   constructor(
     private authService: AuthService,
@@ -24,7 +25,11 @@ export class AdminGuard implements CanActivate {
     const currentRole = this.authService.getCurrentRoleFromToken();
     if (currentRole !== 1) {
       console.warn('Access denied. User is not an admin.');
-      this.router.navigate(['/']);
+      if (currentRole === 2) {
+        this.router.navigate(['/modalities']);
+      } else {
+        this.router.navigate(['/login']);
+      }
       return false;
     }
 

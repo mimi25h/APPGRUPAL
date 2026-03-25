@@ -1,32 +1,18 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { PeopleService } from '../../services/people.service';
 
-export interface DeletePersonResponse {
-  message: string;
-  logout: boolean;
-}
+describe('PeopleService', () => {
+  let service: PeopleService;
 
-@Injectable({
-  providedIn: 'root'
-})
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
+    });
+    service = TestBed.inject(PeopleService);
+  });
 
-export class PeopleService {
-
-  api = "http://localhost:3000/api/people";
-
-  constructor(private http: HttpClient) {}
-
-  getAll(){
-    return this.http.get(this.api);
-  }
-
-  create(person:any){
-    return this.http.post(this.api, person);
-  }
-
-  delete(id: string): Observable<DeletePersonResponse> {
-    return this.http.delete<DeletePersonResponse>(`${this.api}/${id}`);
-  }
-
-}
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
+});
