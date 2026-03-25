@@ -17,16 +17,20 @@ EXPOSE 3000
 WORKDIR /app
 
 # Copy dependency manifests first to leverage Docker build cache.
-COPY package*.json ./
+COPY backend/package*.json ./
 
 # Install only production dependencies.
 RUN npm install --omit=dev
 
-# Copy the full backend source code into the image.
-COPY . .
+
+# Copy the backend source code into the image.
+COPY backend/. .
+
+# Copy the database folder to the image (needed for entrypoint.sh)
+COPY database ./database
 
 # Copy container startup script and place it at the app root.
-COPY ./docker/entrypoint.sh ./entrypoint.sh
+COPY backend/docker/entrypoint.sh ./entrypoint.sh
 
 
 RUN chmod 755 ./entrypoint.sh

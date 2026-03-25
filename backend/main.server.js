@@ -3,7 +3,7 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const { connectToMongo } = require("./config/db");
+const { connectToMongo } = require("./database/config/db");
 
 // Import shared middlewares (JWT token verification).
 const { verifyToken } = require("./main.middlewares");

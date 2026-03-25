@@ -22,8 +22,8 @@ services:
   backend:
     container_name: appgrupal_backend
     build:
-      context: ./backend
-      dockerfile: docker/dockerfile
+      context: .
+      dockerfile: backend/docker/dockerfile
     ports:
       - "3000:3000"
     env_file:

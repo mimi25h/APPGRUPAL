@@ -1,7 +1,7 @@
 // Application entry point.
 // Loads environment configuration and starts the HTTP server.
 const mainServer = require("./main.server");
-const { loadConfig } = require("./config/env");
+const { loadConfig } = require("./database/config/env");
 
 function runServer() {
   try {

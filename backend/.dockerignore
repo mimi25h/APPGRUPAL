@@ -3,7 +3,7 @@ node_modules
 **/node_modules
 
 # Secrets
-config/.env
+../database/config/.env
 
 # Local Mongo data folders (very large, not needed in image build)
 mongodb_data
