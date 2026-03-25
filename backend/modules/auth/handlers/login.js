@@ -56,7 +56,18 @@ async function login(req, res) {
       expiresIn: "1h",
     });
 
-  res.json({ token });
+    return res.json({
+      ok: true,
+      data: { token },
+    });
+
+  } catch (err) {
+    console.error("LOGIN ERROR:", err);
+    return res.status(500).json({
+      ok: false,
+      message: "Error interno del servidor",
+    });
+  }
 }
 
 module.exports = {
