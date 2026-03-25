@@ -12,7 +12,7 @@ if [ ! -f /app/config/.env ]; then
   cat > /app/config/.env <<EOF
 MONGO_URI=${MONGO_URI}
 JWT_SECRET=${JWT_SECRET}
-HTTP_PORT=${HTTP_PORT:-5000}
+HTTP_PORT=${HTTP_PORT:-3000}
 EOF
 fi
 

@@ -11,7 +11,7 @@ LABEL description="app grupal"
 ENV NODE_ENV=production
 
 
-EXPOSE 5000
+EXPOSE 3000
 
 # Set the working directory inside the container.
 WORKDIR /app
