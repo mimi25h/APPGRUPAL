@@ -12,7 +12,6 @@ const loginValidators = [
 ];
 
 async function login(req, res) {
-  console.log("LOGIN HIT");
   try {
     const { username, password } = req.body;
     const jwtSecret = process.env.JWT_SECRET;
