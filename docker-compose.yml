@@ -1,69 +1,55 @@
-# Define multi-container application services.
 services:
-  # Backend API service.
-  backend:
-    # Stable, readable container name.
-    container_name: appgrupal_backend
-    # Build image from backend folder and Dockerfile path.
-    build:
-      context: ./backend
-      dockerfile: docker/dockerfile
-    # Publish backend API port.
-    ports:
-      - "5000:5000"
-    # Load backend secrets and variables from backend config file.
-    env_file:
-      - ./backend/config/.env
-    # Runtime overrides for the backend container.
-    environment:
-      HTTP_PORT: 5000
-      MONGO_URI: mongodb://mongodb:27017/appgrupal
-    # Start backend only when MongoDB is healthy.
-    depends_on:
-      mongodb:
-        condition: service_healthy
-    # Keep container up unless explicitly stopped.
-    restart: unless-stopped
-
-  # Frontend Angular service (development server).
-  frontend:
-    # Stable, readable container name.
-    container_name: appgrupal_frontend
-    # Build image from Angular client folder and Dockerfile path.
-    build:
-      context: ./frontend/client
-      dockerfile: docker/dockerfile
-    # Publish Angular dev server port.
-    ports:
-      - "4000:4200"
-    # Start frontend after backend container exists.
-    depends_on:
-      - backend
-    # Keep container up unless explicitly stopped.
-    restart: unless-stopped
-
   # MongoDB database service.
   mongodb:
-    # Stable, readable container name.
     container_name: appgrupal_mongodb
-    # Pin image major/minor line to match existing data files FCV.
     image: mongo:8.2
-    # Persist MongoDB data and config on host folders.
     volumes:
       - ./mongodb_data:/data/db
       - ./mongodb_config:/data/configdb
-    # Publish MongoDB port.
-    ports:
-      - "27017:27017"
-    # Configure timezone inside the MongoDB container.
-    environment:
-      TZ: "America/Argentina/Buenos_Aires"
-    # Mark Mongo as healthy only after it responds to ping.
+    env_file:
+      - ./docker-compose.env
     healthcheck:
       test: ["CMD", "mongosh", "--eval", "db.adminCommand({ ping: 1 })"]
       interval: 10s
       timeout: 5s
       retries: 10
       start_period: 20s
-    # Keep container up unless explicitly stopped.
     restart: unless-stopped
+    networks:
+      - appgrupal_net
+
+  # Backend API service.
+  backend:
+    container_name: appgrupal_backend
+    build:
+      context: .
+      dockerfile: backend/docker/dockerfile
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./docker-compose.env
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - appgrupal_net
+
+  # Frontend Angular service (development server).
+  frontend:
+    container_name: appgrupal_frontend
+    build:
+      context: ./frontend/client
+      dockerfile: docker/dockerfile
+    ports:
+      - "4000:4200"
+    depends_on:
+      - backend
+    env_file:
+      - ./docker-compose.env
+    restart: unless-stopped
+    networks:
+      - appgrupal_net
+
+networks:
+  appgrupal_net:

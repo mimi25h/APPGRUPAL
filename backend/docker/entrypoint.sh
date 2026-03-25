@@ -2,17 +2,18 @@
 # Exit on first error and fail on undefined variables.
 set -eu
 
-# The app expects config/.env to exist. Build it from env vars when running in containers.
-if [ ! -f /app/config/.env ]; then
+
+# The app expects database/config/.env to exist. Build it from env vars when running in containers.
+if [ ! -f /app/database/config/.env ]; then
   # Enforce required variables at startup.
   : "${MONGO_URI:?MONGO_URI is required}"
   : "${JWT_SECRET:?JWT_SECRET is required}"
 
-  # Generate config/.env from container environment variables.
-  cat > /app/config/.env <<EOF
+  # Generate database/config/.env from container environment variables.
+  cat > /app/database/config/.env <<EOF
 MONGO_URI=${MONGO_URI}
 JWT_SECRET=${JWT_SECRET}
-HTTP_PORT=${HTTP_PORT:-5000}
+HTTP_PORT=${HTTP_PORT:-3000}
 EOF
 fi
 
