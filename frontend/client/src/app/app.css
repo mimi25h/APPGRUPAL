@@ -43,6 +43,11 @@
   font-weight: 600;
 }
 
+.mat-mdc-unelevated-button.delete-btn:not(:disabled) {
+  background-color: #e74c3c !important;  /* red background */
+  color: white !important;               /* white text */
+}
+
 .page-shell {
   padding: 1rem;
 }

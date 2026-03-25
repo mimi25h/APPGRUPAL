@@ -4,6 +4,7 @@ import { Login } from './pages/login/login';
 import { Landing } from './pages/landing/landing';
 import { Users } from './pages/users/users';
 import { Modalities } from './pages/modalities/modalities';
+import { Profile } from './pages/profile/profile';
 import { AuthGuard } from './core/guards/auth-guard';
 import { AdminGuard } from './core/guards/admin.guard';
 import { Organizations } from './pages/organizations/organizations';
@@ -22,4 +23,5 @@ export const routes: Routes = [
 
   // Authenticated route (admin or viewer)
   { path: 'modalities', component: Modalities, canActivate: [AuthGuard] },
+  { path: 'profile', component: Profile, canActivate: [AuthGuard]},
 ];

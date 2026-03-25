@@ -7,6 +7,6 @@ export const API_BASE_URL = environment.apiBaseUrl;
 // Centralized endpoint paths used by auth-related services
 export const API_ENDPOINTS = {
   usersLogin: '/auth/login',        // will resolve to http://localhost:5000/api/auth/login
-  usersDeleteMe: '/auth/delete',
+  usersDeleteMe: '/auth/delete-me',
   bootstrapAdmin: '/auth/bootstrap-admin',
 } as const;

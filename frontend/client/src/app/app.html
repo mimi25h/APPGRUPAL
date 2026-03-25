@@ -8,12 +8,13 @@
       Organizations
     </a>
     <a mat-button routerLink="/modalities" routerLinkActive="active-link">Modalities</a>
+    <a mat-button routerLink="/profile" routerLinkActive="active-link">Profile</a>
   </nav>
 
   <span class="spacer"></span>
 
   <button mat-stroked-button routerLink="/login" *ngIf="!isAuthenticated">Login</button>
-  <button mat-flat-button class="logout-btn" *ngIf="isAuthenticated" (click)="logout()">
+  <button mat-flat-button class="delete-btn" *ngIf="isAuthenticated" (click)="logout()">
     Logout
   </button>
 </mat-toolbar>
