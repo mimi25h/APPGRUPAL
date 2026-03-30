@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { ModalitiesService } from '../../services/modalities.service';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../core/auth/auth.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-modalities',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './modalities.html',
   styleUrls: ['./modalities.css'],
 })

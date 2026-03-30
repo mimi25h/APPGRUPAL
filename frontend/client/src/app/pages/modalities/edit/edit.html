@@ -1,0 +1,50 @@
+<h1>Editar modalidad</h1>
+
+<p *ngIf="loading()">Cargando modalidad...</p>
+<p *ngIf="loadError()">{{ loadError() }}</p>
+
+<form
+	*ngIf="!loading() && !loadError()"
+	#modalityForm="ngForm"
+	(ngSubmit)="updateModality(modalityForm)"
+>
+	<input
+		name="code_meaning"
+		[(ngModel)]="modality.code_meaning"
+		required
+		minlength="2"
+		maxlength="100"
+		placeholder="Code Meaning"
+		#codeMeaning="ngModel"
+	/>
+	<div *ngIf="codeMeaning.touched && codeMeaning.invalid">
+		<small *ngIf="codeMeaning.errors?.['required']">Code Meaning is required</small>
+		<small *ngIf="codeMeaning.errors?.['minlength']"
+			>Code Meaning must have at least 2 characters</small
+		>
+		<small *ngIf="codeMeaning.errors?.['maxlength']">Code Meaning max length is 100 characters</small>
+	</div>
+
+	<input
+		name="code_value"
+		[(ngModel)]="modality.code_value"
+		required
+		minlength="1"
+		maxlength="30"
+		placeholder="Code Value"
+		#codeValue="ngModel"
+	/>
+	<div *ngIf="codeValue.touched && codeValue.invalid">
+		<small *ngIf="codeValue.errors?.['required']">Code Value is required</small>
+		<small *ngIf="codeValue.errors?.['minlength']">Code Value must have at least 1 character</small>
+		<small *ngIf="codeValue.errors?.['maxlength']">Code Value max length is 30 characters</small>
+	</div>
+
+	<button type="submit" [disabled]="modalityForm.invalid">Guardar cambios</button>
+</form>
+
+<p *ngIf="updateError()">{{ updateError() }}</p>
+
+<p>
+	<a [routerLink]="['/modalities']">Volver al listado</a>
+</p>

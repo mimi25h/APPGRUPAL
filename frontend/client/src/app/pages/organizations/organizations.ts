@@ -3,10 +3,11 @@ import { OrganizationsService } from '../../services/organizations.service';
 import { AuthService } from '../../core/auth/auth.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-organizations',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './organizations.html',
   styleUrl: './organizations.css',
 })

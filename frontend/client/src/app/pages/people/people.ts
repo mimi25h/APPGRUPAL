@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { PeopleService } from '../../services/people.service';
 import type { DeletePersonResponse } from '../../services/people.service';
 import { AuthService } from '../../core/auth/auth.service';
@@ -9,7 +9,7 @@ import { AuthService } from '../../core/auth/auth.service';
 @Component({
   selector: 'app-people',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './people.html',
   styleUrls: ['./people.css'],
 })
