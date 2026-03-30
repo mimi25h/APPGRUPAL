@@ -35,19 +35,12 @@ services:
     networks:
       - appgrupal_net
 
-  # Frontend Angular service (development server).
-  frontend:
-    container_name: appgrupal_frontend
+  nginx:
     build:
       context: ./frontend/client
-      dockerfile: docker/dockerfile
+      dockerfile: docker/Dockerfile
     ports:
-      - "4000:4200"
-    depends_on:
-      - backend
-    env_file:
-      - ./docker-compose.env
-    restart: unless-stopped
+      - "80:80"
     networks:
       - appgrupal_net
 

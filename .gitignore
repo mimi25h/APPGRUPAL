@@ -1,5 +1,7 @@
 # Angular specific
 dist/
+dist/client/
+dist/client/browser/
 out-tsc/
 tmp/
 coverage/
@@ -38,3 +40,8 @@ mongodb_config/
 
 # Temporary files until auth
 session.json
+
+# Frontend build artefacts
+/frontend/client/dist/
+/frontend/client/dist/client/
+/frontend/client/dist/client/browser/
