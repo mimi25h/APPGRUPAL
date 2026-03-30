@@ -1,10 +1,30 @@
+h1 {
+  text-align: center;
+}
+
+a.edit-btn {
+  background: #ffb300;
+  color: #222;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  font-weight: bold;
+  margin-right: 8px;
+  text-decoration: none;
+  transition: background 0.2s;
+  display: inline-block;
+}
+a.edit-btn:hover {
+  background: #ffa000;
+  color: #111;
+}
 form {
   max-width: 500px;
   margin: 40px auto;
-  padding: 35px;   /* increased from 25px */
+  padding: 35px; /* increased from 25px */
   background: #ffffff;
   border-radius: 10px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
   font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -17,14 +37,16 @@ select {
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 14px;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
 }
 
 input:focus,
 select:focus {
   outline: none;
   border-color: #4a90e2;
-  box-shadow: 0 0 0 2px rgba(74,144,226,0.2);
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
 }
 
 small {
@@ -44,7 +66,9 @@ button {
   font-size: 15px;
   font-weight: bold;
   cursor: pointer;
-  transition: background 0.2s, transform 0.05s;
+  transition:
+    background 0.2s,
+    transform 0.05s;
 }
 
 button:disabled {
@@ -70,7 +94,7 @@ h1 {
   padding: 30px;
   background: white;
   border-radius: 10px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
 }
 
 .people-list li {
@@ -84,19 +108,19 @@ h1 {
 
 .logout-container {
   text-align: center; /* center children horizontally */
-  margin: 16px 0;     /* optional spacing above/below */
+  margin: 16px 0; /* optional spacing above/below */
 }
 
 button.logout-btn {
-  display: inline-block;      
-  padding: 14px 48px;           
-  font-size: 0.8rem;          
+  display: inline-block;
+  padding: 14px 48px;
+  font-size: 0.8rem;
   border-radius: 4px;
   background-color: #f44336;
   color: white;
   border: none;
   cursor: pointer;
-  width: auto;                
+  width: auto;
 }
 
 button.logout-btn:hover {
@@ -104,15 +128,15 @@ button.logout-btn:hover {
 }
 
 button.user-btn {
-  display: inline-block;      
-  padding: 14px 48px;           
-  font-size: 0.8rem;          
+  display: inline-block;
+  padding: 14px 48px;
+  font-size: 0.8rem;
   border-radius: 4px;
   background-color: #3457f4;
   color: white;
   border: none;
   cursor: pointer;
-  width: auto;                
+  width: auto;
 }
 
 button.user-btn:hover {

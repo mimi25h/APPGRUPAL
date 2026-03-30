@@ -102,7 +102,7 @@
     <li *ngFor="let person of people">
       <span class="person-name"> {{ person.name_01 }} {{ person.surname_01 }} </span>
 
-      <a *ngIf="isAdmin" [routerLink]="['/people', person._id, 'edit']">Edit</a>
+      <a *ngIf="isAdmin" [routerLink]="['/people', person._id, 'edit']" class="edit-btn">Edit</a>
       <button *ngIf="isAdmin" class="delete-btn" (click)="deletePerson(person._id)">Delete</button>
     </li>
   </ul>
