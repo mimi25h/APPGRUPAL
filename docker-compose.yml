@@ -38,7 +38,7 @@ services:
   nginx:
     build:
       context: ./frontend/client
-      dockerfile: docker/Dockerfile
+      dockerfile: docker/dockerfile
     ports:
       - "80:80"
     networks:
