@@ -12,7 +12,6 @@ const loginValidators = [
 ];
 
 async function login(req, res) {
-  console.log("LOGIN HIT");
   try {
     const { username, password } = req.body;
     const jwtSecret = process.env.JWT_SECRET;
@@ -34,7 +33,7 @@ async function login(req, res) {
 
     const user = await users.findOne({ username });
 
-    // ✅ FIRST check user exists
+    // FIRST check user exists
     if (!user) {
       return res.status(401).json({
         ok: false,
@@ -42,7 +41,7 @@ async function login(req, res) {
       });
     }
 
-    // ✅ THEN verify password (safe now)
+    // THEN verify password (safe now)
     const validPassword = await argon2.verify(user.password, password);
 
     if (!validPassword) {

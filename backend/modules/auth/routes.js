@@ -14,6 +14,7 @@ const {
   validateRequest,
 } = require("../../main.middlewares");
 const Users = require("../users/schemas.js");
+const Persons = require("../people/schemas");
 
 const AuthRouter = express.Router();
 
@@ -29,30 +30,27 @@ AuthRouter.post("/login", ...loginValidators, validateRequest, login);
 AuthRouter.post(
   "/bootstrap-admin",
   ...bootstrapAdminValidators,
+  ...bootstrapAdminValidators,
   validateRequest,
   bootstrapAdmin,
 );
 
 // Route: DELETE /auth/:id — deletes a person and all their associated users. Admin only.
 // Returns a logout flag if the deleted person matches the currently authenticated user.
-AuthRouter.delete("/:id", verifyToken, checkIsAdmin, async (req, res) => {
-  const personId = req.params.id;
+AuthRouter.delete("/delete-me", verifyToken, async (req, res) => {
+  const personId = req.token?.personId;
+
   try {
     const deletedPerson = await Persons.findByIdAndDelete(personId);
     if (!deletedPerson)
-      return res.status(404).json({ error: "Person not found" });
+      return res.status(404).json({ message: "Person not found" });
 
     await Users.deleteMany({ fk_person: personId });
 
-    const logout = req.token?.personId === personId;
-
-    res.json({
-      message: "Person and associated users deleted",
-      logout,
-    });
+    res.json({ message: "Your account and associated users were deleted" });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Failed to delete person and users" });
+    res.status(500).json({ message: "Failed to delete your account" });
   }
 });
 

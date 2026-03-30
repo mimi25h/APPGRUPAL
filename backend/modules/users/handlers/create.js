@@ -19,27 +19,17 @@ async function createUser(req, res) {
 
     // Check that the username and email are not already taken by another user.
     const duplicated = await Users.findOne({
-      $or: [{ username: payload.username }, { email: payload.email }],
+      $or: [{ username: payload.username }],
     });
 
     if (duplicated) {
       return res.status(409).json({
         ok: false,
-        message: "Ya existe un usuario con el username o email enviado",
+        message: "Ya existe un usuario con el username enviado",
       });
     }
 
     // Ensure the person does not already have an associated user account.
-    const duplicatedPerson = await Users.findOne({
-      fk_person: payload.fk_person,
-    });
-    if (duplicatedPerson) {
-      return res.status(409).json({
-        ok: false,
-        message: "La persona enviada ya tiene un usuario asociado",
-      });
-    }
-
     // Hash the plain-text password with Argon2 before storing it.
     payload.password = await argon2.hash(payload.password);
 
