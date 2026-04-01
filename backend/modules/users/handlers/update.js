@@ -3,7 +3,7 @@
 const argon2 = require("argon2");
 const Users = require("../schemas");
 const People = require("../../people/schemas");
-const { findById } = require("../../modules/modules.services");
+const { findById, findOne } = require("../../modules/modules.services");
 
 async function updateUser(req, res) {
   try {

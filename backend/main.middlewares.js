@@ -40,12 +40,12 @@ function verifyToken(req, res, next) {
 
   const token = header.split(" ")[1];
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+  jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
     if (err) {
       return res.status(401).json({ message: "No autorizado" });
     }
 
-    if (!findById(Users, decoded.id)) {
+    if (!(await findById(Users, decoded.id))) {
       return res.status(401).json({ message: "Usuario no encontrado" });
     }
 

@@ -4,6 +4,7 @@ const { body } = require("express-validator");
 const argon2 = require("argon2");
 const jwt = require("jsonwebtoken");
 const Users = require("../../users/schemas");
+const { findOne } = require("../../modules/modules.services");
 
 // Input validators: enforce non-empty username and password strings.
 const loginValidators = [
