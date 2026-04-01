@@ -3,6 +3,7 @@
 const jwt = require("jsonwebtoken");
 const { validationResult, matchedData } = require("express-validator");
 const Users = require("./modules/users/schemas.js");
+const { findById } = require("./modules/modules.services");
 
 // Runs express-validator checks on the current request.
 // Returns 400 with error details if validation fails.
@@ -44,7 +45,7 @@ function verifyToken(req, res, next) {
       return res.status(401).json({ message: "No autorizado" });
     }
 
-    if (!Users.findById(decoded.id)) {
+    if (!findById(Users, decoded.id)) {
       return res.status(401).json({ message: "Usuario no encontrado" });
     }
 

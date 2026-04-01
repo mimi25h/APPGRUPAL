@@ -4,13 +4,14 @@
 const argon2 = require("argon2");
 const Users = require("../schemas");
 const People = require("../../people/schemas");
+const { findById } = require("../../modules/modules.services");
 
 async function createUser(req, res) {
   try {
     const payload = { ...req.parsedBody };
 
     // Verify the referenced person exists before creating the user.
-    const person = await People.findById(payload.fk_person);
+    const person = await findById(People, payload.fk_person);
     if (!person) {
       return res
         .status(404)
@@ -18,14 +19,14 @@ async function createUser(req, res) {
     }
 
     // Check that the username and email are not already taken by another user.
-    const duplicated = await Users.findOne({
-      $or: [{ username: payload.username }],
+    const duplicated = await findOne(Users, {
+      $or: [{ username: payload.username }, { email: payload.email }],
     });
 
     if (duplicated) {
       return res.status(409).json({
         ok: false,
-        message: "Ya existe un usuario con el username enviado",
+        message: "Ya existe un usuario con el username o email enviado",
       });
     }
 
@@ -35,7 +36,7 @@ async function createUser(req, res) {
 
     const created = await Users.create(payload);
     // Return the created user without exposing the hashed password.
-    const createdUser = await Users.findById(created._id).select("-password");
+    const createdUser = await findById(Users, created._id).select("-password");
 
     res.status(201).json({ ok: true, data: createdUser });
   } catch (error) {

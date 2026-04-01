@@ -1,12 +1,13 @@
 // Handler: retrieves one or all People documents from the database.
 const People = require("../schemas");
+const { findById } = require("../../modules/modules.services");
 
 // If req.params.id is present, fetches a single person by ID.
 // Otherwise, returns the full list sorted by newest first.
 async function readPeople(req, res) {
   try {
     if (req.params.id) {
-      const person = await People.findById(req.params.id);
+      const person = await findById(People, req.params.id);
       if (!person) {
         return res
           .status(404)

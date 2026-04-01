@@ -6,6 +6,7 @@ const argon2 = require("argon2");
 const jwt = require("jsonwebtoken");
 const People = require("../../people/schemas");
 const Users = require("../../users/schemas");
+const { findById, findOne } = require("../../modules/modules.services");
 
 // Input validators for the full bootstrap-admin request body.
 // Validates person fields (document, names, birth date), plus username, password, and email.
@@ -106,7 +107,7 @@ async function bootstrapAdmin(req, res) {
     const payload = req.parsedBody;
 
     // Check for duplicate person by document number.
-    const duplicatedByDocument = await People.findOne({
+    const duplicatedByDocument = await findOne(People, {
       document: payload.person.document,
     });
 
@@ -118,7 +119,7 @@ async function bootstrapAdmin(req, res) {
     }
 
     // Check for duplicate username or email before creating the user.
-    const duplicatedUser = await Users.findOne({
+    const duplicatedUser = await findOne(Users, {
       $or: [{ username: payload.username }, { email: payload.email }],
     });
 
@@ -145,7 +146,7 @@ async function bootstrapAdmin(req, res) {
       expiresIn: "1h",
     });
 
-    const safeUser = await Users.findById(createdUser._id).select("-password");
+    const safeUser = await findById(Users, createdUser._id).select("-password");
 
     return res.status(201).json({
       ok: true,

@@ -3,12 +3,13 @@
 const argon2 = require("argon2");
 const Users = require("../schemas");
 const People = require("../../people/schemas");
+const { findById } = require("../../modules/modules.services");
 
 async function updateUser(req, res) {
   try {
     const payload = { ...req.parsedBody };
     // Verify the target user exists before applying any changes.
-    const currentUser = await Users.findById(req.params.id);
+    const currentUser = await findById(Users, req.params.id);
 
     if (!currentUser) {
       return res
@@ -18,14 +19,14 @@ async function updateUser(req, res) {
 
     // If fk_person is being changed, validate the new person exists and is not already linked.
     if (payload.fk_person) {
-      const person = await People.findById(payload.fk_person);
+      const person = await findById(People, payload.fk_person);
       if (!person) {
         return res
           .status(404)
           .json({ ok: false, message: "La persona asociada no existe" });
       }
 
-      const duplicatedPerson = await Users.findOne({
+      const duplicatedPerson = await findOne(Users, {
         _id: { $ne: req.params.id },
         fk_person: payload.fk_person,
       });
@@ -40,7 +41,7 @@ async function updateUser(req, res) {
 
     // If username or email is being changed, check for conflicts with other existing users.
     if (payload.username || payload.email) {
-      const duplicated = await Users.findOne({
+      const duplicated = await findOne(Users, {
         _id: { $ne: req.params.id },
         $or: [
           ...(payload.username ? [{ username: payload.username }] : []),

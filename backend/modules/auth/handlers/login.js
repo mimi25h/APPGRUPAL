@@ -31,7 +31,7 @@ async function login(req, res) {
       });
     }
 
-    const user = await users.findOne({ username });
+    const user = await findOne(users, { username });
 
     // FIRST check user exists
     if (!user) {
@@ -59,7 +59,6 @@ async function login(req, res) {
       ok: true,
       data: { token },
     });
-
   } catch (err) {
     console.error("LOGIN ERROR:", err);
     return res.status(500).json({
