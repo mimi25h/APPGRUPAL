@@ -1,11 +1,11 @@
 // Handler: deletes an Organization document by ID.
-const Organization = require("../schemas");
+const Organizations = require("../schemas");
 
 // Finds and removes the organization from the database.
 // Returns the deleted document or 404 if not found.
 async function deleteOrganization(req, res) {
   try {
-    const deleted = await Organization.findByIdAndDelete(req.params.id);
+    const deleted = await Organizations.findByIdAndDelete(req.params.id);
     if (!deleted) {
       return res
         .status(404)

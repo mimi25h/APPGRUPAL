@@ -9,6 +9,6 @@ const modalitySchema = new mongoose.Schema({
   status: { type: Boolean, default: true },
 });
 
-const modality = mongoose.model("modality", modalitySchema, "modalities");
+const Modalities = mongoose.model("modality", modalitySchema, "modalities");
 
-module.exports = modality;
+module.exports = Modalities;

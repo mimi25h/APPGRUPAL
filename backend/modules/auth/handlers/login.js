@@ -3,7 +3,7 @@
 const { body } = require("express-validator");
 const argon2 = require("argon2");
 const jwt = require("jsonwebtoken");
-const users = require("../../users/schemas");
+const Users = require("../../users/schemas");
 
 // Input validators: enforce non-empty username and password strings.
 const loginValidators = [
@@ -31,7 +31,7 @@ async function login(req, res) {
       });
     }
 
-    const user = await findOne(users, { username });
+    const user = await findOne(Users, { username });
 
     // FIRST check user exists
     if (!user) {

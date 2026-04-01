@@ -1,11 +1,11 @@
 // Handler: creates a new Modality document in the database.
-const Modality = require("../schemas");
+const Modalities = require("../schemas");
 
 // Inserts a new modality using the sanitized body from req.parsedBody.
 // Responds with 201 and the created document on success.
 async function createModality(req, res) {
   try {
-    const created = await Modality.create(req.parsedBody);
+    const created = await Modalities.create(req.parsedBody);
     res.status(201).json({ ok: true, data: created });
   } catch (error) {
     res.status(500).json({ ok: false, message: error.message });

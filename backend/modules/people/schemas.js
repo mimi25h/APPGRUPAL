@@ -15,6 +15,6 @@ const peopleSchema = new mongoose.Schema({
   phone_numbers: { type: [String] },
 });
 
-const people = mongoose.model("people", peopleSchema, "people");
+const People = mongoose.model("people", peopleSchema, "people");
 
-module.exports = people;
+module.exports = People;

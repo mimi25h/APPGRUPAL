@@ -11,10 +11,10 @@ const organizationSchema = new mongoose.Schema({
   status: { type: Boolean, default: true },
 });
 
-const organization = mongoose.model(
+const Organizations = mongoose.model(
   "organization",
   organizationSchema,
   "organizations",
 );
 
-module.exports = organization;
+module.exports = Organizations;

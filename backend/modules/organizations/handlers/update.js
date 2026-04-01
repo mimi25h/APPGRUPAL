@@ -1,11 +1,11 @@
 // Handler: updates an existing Organization document by ID.
-const Organization = require("../schemas");
+const Organizations = require("../schemas");
 
 // Applies the validated partial body from req.parsedBody to the organization record.
 // Returns the updated document or 404 if not found.
 async function updateOrganization(req, res) {
   try {
-    const updated = await Organization.findByIdAndUpdate(
+    const updated = await Organizations.findByIdAndUpdate(
       req.params.id,
       req.parsedBody,
       {
