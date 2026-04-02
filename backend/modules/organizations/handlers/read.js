@@ -1,6 +1,6 @@
 // Handler: retrieves one or all Organization documents from the database.
 const Organizations = require("../schemas");
-const { findById } = require("../../modules/modules.services");
+const { findById } = require("../../modules.services");
 
 // If req.params.id is present, fetches a single organization by ID.
 // Otherwise, returns the full list sorted by newest first.

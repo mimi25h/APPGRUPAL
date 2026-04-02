@@ -1,6 +1,6 @@
 // Handler: retrieves one or all People documents from the database.
 const People = require("../schemas");
-const { findById } = require("../../modules/modules.services");
+const { findById } = require("../../modules.services");
 
 // If req.params.id is present, fetches a single person by ID.
 // Otherwise, returns the full list sorted by newest first.

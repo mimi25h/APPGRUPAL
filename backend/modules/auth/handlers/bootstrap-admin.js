@@ -6,7 +6,7 @@ const argon2 = require("argon2");
 const jwt = require("jsonwebtoken");
 const People = require("../../people/schemas");
 const Users = require("../../users/schemas");
-const { findById, findOne } = require("../../modules/modules.services");
+const { findById, findOne } = require("../../modules.services");
 
 // Input validators for the full bootstrap-admin request body.
 // Validates person fields (document, names, birth date), plus username, password, and email.

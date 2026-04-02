@@ -45,7 +45,7 @@ function verifyToken(req, res, next) {
       return res.status(401).json({ message: "No autorizado" });
     }
 
-    if (!(await findById(Users, decoded.id))) {
+    if (!(await findById(Users, decoded.userId))) {
       return res.status(401).json({ message: "Usuario no encontrado" });
     }
 

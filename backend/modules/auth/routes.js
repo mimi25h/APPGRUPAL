@@ -30,7 +30,6 @@ AuthRouter.post("/login", ...loginValidators, validateRequest, login);
 AuthRouter.post(
   "/bootstrap-admin",
   ...bootstrapAdminValidators,
-  ...bootstrapAdminValidators,
   validateRequest,
   bootstrapAdmin,
 );

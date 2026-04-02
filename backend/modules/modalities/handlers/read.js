@@ -1,6 +1,6 @@
 // Handler: retrieves one or all Modality documents from the database.
 const Modalities = require("../schemas");
-const { findById } = require("../../modules/modules.services");
+const { findById } = require("../../modules.services");
 
 // If req.params.id is present, fetches a single modality by ID.
 // Otherwise, returns the full list sorted by newest first.

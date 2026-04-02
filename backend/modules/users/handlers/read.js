@@ -1,6 +1,6 @@
 // Handler: retrieves one or all User documents from the database (passwords excluded).
 const Users = require("../schemas");
-const { findById } = require("../../modules/modules.services");
+const { findById } = require("../../modules.services");
 
 // If req.params.id is present, fetches a single user by ID (no password).
 // Otherwise, returns all users sorted by newest first (no passwords).
