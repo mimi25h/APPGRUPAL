@@ -5,11 +5,12 @@ import { Router, RouterLink } from '@angular/router';
 import { PeopleService } from '../../services/people.service';
 import type { DeletePersonResponse } from '../../services/people.service';
 import { AuthService } from '../../core/auth/auth.service';
+import { ListOfPeople } from './list-of-people/list-of-people/list-of-people';
 
 @Component({
   selector: 'app-people',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, ListOfPeople],
   templateUrl: './people.html',
   styleUrls: ['./people.css'],
 })
@@ -26,6 +27,8 @@ export class People implements OnInit {
   };
 
   isAdmin = false;
+  showList = false;
+  showForm = true;
 
   constructor(
     private peopleService: PeopleService,
@@ -35,6 +38,10 @@ export class People implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // Always start with form visible and list hidden on page load.
+    this.showList = false;
+    this.showForm = true;
+
     // Guard route manually in case component is reached without a valid session.
     if (!this.authService.isAuthenticated()) {
       this.router.navigate(['/login']);
@@ -85,12 +92,27 @@ export class People implements OnInit {
           birth_date: '',
           phone_numbers: '',
         };
+        this.showList = true;
+        this.showForm = false;
         this.loadPeople();
       },
       error: (err) => {
         console.log('BACKEND ERROR:', err.error);
       },
     });
+  }
+
+  showPeopleList() {
+    this.showList = true;
+    this.showForm = false;
+    if (!this.people.length) {
+      this.loadPeople();
+    }
+  }
+
+  hidePeopleList() {
+    this.showList = false;
+    this.showForm = true;
   }
 
   deletePerson(id: string) {

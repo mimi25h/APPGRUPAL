@@ -76,6 +76,25 @@ button:disabled {
   cursor: not-allowed;
 }
 
+.list-button {
+  width: auto !important;
+  padding: 10px 20px !important;
+  display: block;
+  margin: 20px auto !important;
+}
+
+.back-button {
+  width: auto !important;
+  padding: 10px 20px !important;
+  display: block;
+  margin: 20px auto !important;
+  background: #666 !important;
+}
+
+.back-button:hover {
+  background: #555 !important;
+}
+
 body {
   background: #f4f6f8;
   margin: 0;
@@ -141,4 +160,8 @@ button.user-btn {
 
 button.user-btn:hover {
   background-color: #3474f4;
+}
+
+.list-button {
+  padding: 30px;
 }

@@ -1,6 +1,6 @@
 <h1 *ngIf="isAdmin">People creation centre</h1>
 
-<form *ngIf="isAdmin" #personForm="ngForm" (ngSubmit)="createPerson()">
+<form *ngIf="isAdmin && showForm" #personForm="ngForm" (ngSubmit)="createPerson()">
   <!-- DOCUMENT -->
   <input
     name="document"
@@ -95,15 +95,17 @@
   <button type="submit" [disabled]="personForm.invalid">Create Person</button>
 </form>
 
-<div class="people-card">
-  <h1>List of all people registered on the site</h1>
+<button class="list-button" *ngIf="!showList" type="button" (click)="showPeopleList()">
+  Ver Listado
+</button>
 
-  <ul class="people-list">
-    <li *ngFor="let person of people">
-      <span class="person-name"> {{ person.name_01 }} {{ person.surname_01 }} </span>
+<app-list-of-people
+  *ngIf="showList"
+  [people]="people"
+  [isAdmin]="isAdmin"
+  (delete)="deletePerson($event)"
+></app-list-of-people>
 
-      <a *ngIf="isAdmin" [routerLink]="['/people', person._id, 'edit']" class="edit-btn">Edit</a>
-      <button *ngIf="isAdmin" class="delete-btn" (click)="deletePerson(person._id)">Delete</button>
-    </li>
-  </ul>
-</div>
+<button class="back-button" *ngIf="showList" type="button" (click)="hidePeopleList()">
+  ← Atrás
+</button>
