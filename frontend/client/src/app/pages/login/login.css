@@ -8,7 +8,7 @@ form {
   border: 1px solid #ddd;
   border-radius: 10px;
   background-color: #f9f9f9;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   gap: 15px;
@@ -33,7 +33,7 @@ input {
 }
 
 input:focus {
-  border-color: #007BFF;
+  border-color: #007bff;
 }
 
 /* Submit button */
@@ -42,7 +42,7 @@ button {
   font-size: 1rem;
   border: none;
   border-radius: 6px;
-  background-color: #007BFF;
+  background-color: #007bff;
   color: white;
   cursor: pointer;
   transition: background-color 0.2s;
@@ -60,26 +60,27 @@ button:hover {
 }
 
 /* Optional: make inputs stretch full width */
-input, button {
+input,
+button {
   width: 100%;
   box-sizing: border-box;
 }
 
 .logout-container {
   text-align: center; /* center children horizontally */
-  margin: 16px 0;     /* optional spacing above/below */
+  margin: 16px 0; /* optional spacing above/below */
 }
 
 button.logout-btn {
-  display: inline-block;      
-  padding: 14px 48px;           
-  font-size: 0.8rem;          
+  display: inline-block;
+  padding: 14px 48px;
+  font-size: 0.8rem;
   border-radius: 4px;
   background-color: #f44336;
   color: white;
   border: none;
   cursor: pointer;
-  width: auto;                
+  width: auto;
 }
 
 button.logout-btn:hover {
@@ -97,4 +98,23 @@ h2 {
   text-align: center;
   color: #333;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Snackbar styles */
+:global(.snackbar-success) {
+  background-color: #4caf50 !important;
+  color: white !important;
+}
+
+:global(.snackbar-success .mdc-snackbar__label) {
+  color: white !important;
+}
+
+:global(.snackbar-error) {
+  background-color: #f44336 !important;
+  color: white !important;
+}
+
+:global(.snackbar-error .mdc-snackbar__label) {
+  color: white !important;
 }

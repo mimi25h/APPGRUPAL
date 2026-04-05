@@ -7,13 +7,9 @@
 
   <input name="password" [(ngModel)]="password" type="password" required placeholder="Password" />
 
-  <button type="submit">Login</button>
+  <button type="submit" matButton="outlined">Login</button>
 </form>
 
 <div class="logout-container">
   <button class="logout-btn" *ngIf="isLoggedIn" (click)="logout()">Logout</button>
-</div>
-
-<div *ngIf="errorMessage" class="error">
-  {{ errorMessage }}
 </div>

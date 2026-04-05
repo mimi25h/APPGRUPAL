@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { AuthService } from '../../core/auth/auth.service';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login',
@@ -14,22 +15,23 @@ import { Router } from '@angular/router';
 export class Login {
   username = '';
   password = '';
-
-  errorMessage = '';
   isLoggedIn = false;
+
+  private _snackBar = inject(MatSnackBar);
 
   constructor(
     private router: Router,
     private authService: AuthService,
   ) {
+    console.log('✅ Componente Login cargado');
     this.isLoggedIn = this.authService.isAuthenticated();
   }
 
   submitLogin(form: NgForm) {
-    this.errorMessage = '';
-
+    console.log('📝 submitLogin ejecutado', form.valid);
     if (!form.valid) {
-      this.errorMessage = 'Enter username and password.';
+      console.log('❌ Formulario inválido');
+      this.openSnackBar('Ingresa usuario y contraseña.', 'Cerrar', 'error');
       return;
     }
 
@@ -44,6 +46,8 @@ export class Login {
             this.isLoggedIn = true;
             const role = this.authService.getCurrentRoleFromToken();
 
+            this.openSnackBar('¡Sesión iniciada correctamente!', 'Cerrar', 'success');
+
             if (role === 1) {
               this.router.navigate(['/people']);
               return;
@@ -54,22 +58,35 @@ export class Login {
               return;
             }
 
-            this.errorMessage = 'Role not allowed.';
+            this.openSnackBar('Rol no permitido.', 'Cerrar', 'error');
             this.authService.logout();
             this.router.navigate(['/login']);
           } else {
-            this.errorMessage = res.message || 'Invalid login.';
+            const errorMsg = res.message || 'Credenciales inválidas.';
+            this.openSnackBar(errorMsg, 'Cerrar', 'error');
           }
         },
         error: (err) => {
-          this.errorMessage = err.error?.message || 'Server error';
+          const errorMsg = err.error?.message || 'Error del servidor';
+          this.openSnackBar(errorMsg, 'Cerrar', 'error');
         },
       });
+  }
+
+  openSnackBar(message: string, action: string, type: 'success' | 'error' = 'error') {
+    console.log('Abriendo snackbar:', message, type);
+    this._snackBar.open(message, action, {
+      duration: 4000,
+      horizontalPosition: 'center',
+      verticalPosition: 'bottom',
+      panelClass: [`snackbar-${type}`],
+    });
   }
 
   logout() {
     this.authService.logout();
     this.isLoggedIn = false;
+    this.openSnackBar('Sesión cerrada.', 'Cerrar', 'success');
     this.router.navigate(['/login']);
   }
 }
