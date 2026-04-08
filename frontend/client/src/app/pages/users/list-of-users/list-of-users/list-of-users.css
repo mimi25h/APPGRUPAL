@@ -1,0 +1,64 @@
+button {
+  width: 100%;
+  padding: 12px;
+  background: #4a90e2;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    transform 0.05s;
+}
+
+button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+body {
+  background: #f4f6f8;
+  margin: 0;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+  margin-top: 30px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.users-card {
+  max-width: 500px;
+  margin: 30px auto;
+  padding: 30px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
+
+.users-list li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.edit-btn {
+  display: inline-block;
+  padding: 8px 16px;
+  font-size: 0.8rem;
+  border-radius: 4px;
+  background-color: #3457f4;
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+.edit-btn:hover {
+  background-color: #3474f4;
+}

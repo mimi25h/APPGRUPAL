@@ -1,0 +1,15 @@
+<div class="users-card">
+  <h1>List of users</h1>
+
+  <ul class="users-list">
+    <li *ngFor="let user of users">
+      <span class="user-info">
+        <strong>Username:</strong> {{ user.username }}<br />
+        <strong>Email:</strong> {{ user.email }}<br />
+        <strong>Role:</strong> {{ user.role === 1 ? 'Admin' : 'User' }}
+      </span>
+
+      <a *ngIf="isAdmin" [routerLink]="['/users', user._id, 'edit']" class="edit-btn">Edit</a>
+    </li>
+  </ul>
+</div>

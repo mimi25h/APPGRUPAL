@@ -28,6 +28,8 @@ export class UsersEdit {
     role: 2,
   };
 
+  private original_fk_person = '';
+
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
 
@@ -51,6 +53,7 @@ export class UsersEdit {
           password: '',
           role: res.role ?? 2,
         };
+        this.original_fk_person = res.fk_person || '';
         this.loading.set(false);
       },
       error: (err) => {
@@ -70,11 +73,15 @@ export class UsersEdit {
     this.updateError.set('');
 
     const payload: any = {
-      fk_person: this.user.fk_person?.trim(),
       username: this.user.username,
       email: this.user.email,
       role: this.user.role,
     };
+
+    // Only include fk_person if it changed
+    if (this.user.fk_person?.trim() !== this.original_fk_person) {
+      payload.fk_person = this.user.fk_person?.trim();
+    }
 
     const password = this.user.password?.trim();
     if (password) {

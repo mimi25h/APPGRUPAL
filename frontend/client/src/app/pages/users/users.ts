@@ -1,18 +1,20 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/auth/auth.service';
 import { UsersService } from '../../services/users.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ListOfUsers } from './list-of-users/list-of-users/list-of-users';
 
 @Component({
   selector: 'app-users',
   standalone: true,
-  imports: [FormsModule],
+  imports: [CommonModule, FormsModule, ListOfUsers],
   templateUrl: './users.html',
   styleUrls: ['./users.css'],
 })
-export class Users {
+export class Users implements OnInit {
   // Form model for creating a user linked to an existing person.
   fk_person = '';
   username = '';
@@ -22,14 +24,21 @@ export class Users {
   token = '';
   currentRole: 1 | 2 | null = null;
   private _snackBar = inject(MatSnackBar);
+  users: any[] = [];
+  showList = false;
+  showForm = true;
 
   constructor(
     private router: Router,
+    private cdr: ChangeDetectorRef,
     private authService: AuthService,
     private usersService: UsersService,
   ) {}
 
   ngOnInit() {
+    this.showList = false;
+    this.showForm = true;
+
     // Resolve session context and enforce admin-only access for this page.
     this.token = this.authService.getToken() ?? '';
     this.currentRole = this.authService.getCurrentRoleFromToken();
@@ -71,7 +80,10 @@ export class Users {
           this.email = '';
           this.password = '';
           this.role = 2;
+          this.showUserList();
+          this.loadUsers();
         },
+
         error: (err) => {
           console.error(err);
           this.openSnackBar('Error al crear usuario.', 'Cerrar', 'error');
@@ -81,7 +93,27 @@ export class Users {
         },
       });
   }
-
+  loadUsers() {
+    this.usersService.getAll().subscribe({
+      next: (res) => {
+        this.users = res;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error(err);
+        this.openSnackBar('Error al cargar usuarios.', 'Cerrar', 'error');
+      },
+    });
+  }
+  showUserList() {
+    this.showForm = false;
+    this.showList = true;
+    this.loadUsers();
+  }
+  hideUserList() {
+    this.showList = false;
+    this.showForm = true;
+  }
   goToPeople() {
     // Convenience navigation back to people management.
     this.router.navigate(['/people']);

@@ -8,7 +8,7 @@ form {
   border: 1px solid #ddd;
   border-radius: 8px;
   background-color: #f9f9f9;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
   gap: 15px;
@@ -23,7 +23,8 @@ h1 {
 }
 
 /* Inputs and select */
-input, select {
+input,
+select {
   padding: 10px;
   border-radius: 5px;
   border: 1px solid #ccc;
@@ -33,15 +34,16 @@ input, select {
   transition: border-color 0.2s;
 }
 
-input:focus, select:focus {
-  border-color: #007BFF;
+input:focus,
+select:focus {
+  border-color: #007bff;
   outline: none;
 }
 
 /* Button */
 button {
   padding: 10px;
-  background-color: #007BFF;
+  background-color: #007bff;
   color: white;
   border: none;
   border-radius: 5px;
@@ -55,43 +57,78 @@ button:hover {
 }
 
 /* Optional: add some spacing for hidden input */
-input[type="hidden"] {
+input[type='hidden'] {
   display: none;
 }
 
 .logout-container {
   text-align: center; /* center children horizontally */
-  margin: 16px 0;     /* optional spacing above/below */
+  margin: 16px 0; /* optional spacing above/below */
 }
 
 button.logout-btn {
-  display: inline-block;      
-  padding: 14px 48px;           
-  font-size: 0.8rem;          
+  display: inline-block;
+  padding: 14px 48px;
+  font-size: 0.8rem;
   border-radius: 4px;
   background-color: #f44336;
   color: white;
   border: none;
   cursor: pointer;
-  width: auto;                
+  width: auto;
 }
 
 button.logout-btn:hover {
   background-color: #d32f2f;
 }
 
-button.user-btn {
-  display: inline-block;      
-  padding: 14px 48px;           
-  font-size: 0.8rem;          
+button.user-btn,
+.edit-btn {
+  display: inline-block;
+  padding: 14px 48px;
+  font-size: 0.8rem;
   border-radius: 4px;
   background-color: #3457f4;
   color: white;
   border: none;
   cursor: pointer;
-  width: auto;                
+  width: auto;
 }
 
 button.user-btn:hover {
   background-color: #3474f4;
+}
+
+.btn-list-users {
+  display: block;
+  padding: 10px 15px;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.btn-list-users:hover {
+  background-color: #218838;
+}
+
+.btn-back-to-form {
+  display: block;
+  padding: 10px 15px;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  cursor: pointer;
+  width: auto;
+  margin: 10px auto;
+}
+
+.btn-back-to-form:hover {
+  background-color: #5a6268;
 }

@@ -1,6 +1,6 @@
 <h1>Create User</h1>
 
-<form #userForm="ngForm" (ngSubmit)="createUser(userForm)">
+<form #userForm="ngForm" (ngSubmit)="createUser(userForm)" *ngIf="showForm">
   <!-- Person ID is required: it must reference an existing person document -->
   <input name="fk_person" [(ngModel)]="fk_person" placeholder="Person ID (required)" />
 
@@ -16,4 +16,14 @@
   </select>
 
   <button type="submit">Create User</button>
+  <button type="button" class="btn-list-users" *ngIf="!showList" (click)="showUserList()">
+    Listado de usuarios
+  </button>
 </form>
+
+<app-list-of-users *ngIf="showList" [users]="users" [isAdmin]="currentRole === 1">
+</app-list-of-users>
+
+<button type="button" class="btn-back-to-form" *ngIf="showList" (click)="hideUserList()">
+  Volver al formulario
+</button>
