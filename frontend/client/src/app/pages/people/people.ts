@@ -10,7 +10,7 @@ import { ListOfPeople } from './list-of-people/list-of-people/list-of-people';
 @Component({
   selector: 'app-people',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, ListOfPeople],
+  imports: [CommonModule, FormsModule, ListOfPeople],
   templateUrl: './people.html',
   styleUrls: ['./people.css'],
 })

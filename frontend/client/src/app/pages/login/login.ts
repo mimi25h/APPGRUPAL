@@ -23,14 +23,14 @@ export class Login {
     private router: Router,
     private authService: AuthService,
   ) {
-    console.log('✅ Componente Login cargado');
+    console.log(' Componente Login cargado');
     this.isLoggedIn = this.authService.isAuthenticated();
   }
 
   submitLogin(form: NgForm) {
-    console.log('📝 submitLogin ejecutado', form.valid);
+    console.log(' submitLogin ejecutado', form.valid);
     if (!form.valid) {
-      console.log('❌ Formulario inválido');
+      console.log(' Formulario inválido');
       this.openSnackBar('Ingresa usuario y contraseña.', 'Cerrar', 'error');
       return;
     }
