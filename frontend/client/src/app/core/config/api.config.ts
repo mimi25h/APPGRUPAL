@@ -8,5 +8,6 @@ export const API_BASE_URL = environment.apiBaseUrl;
 export const API_ENDPOINTS = {
   usersLogin: '/auth/login', // will resolve to http://localhost:3000/auth/login
   usersDeleteMe: '/auth/delete-me',
+  linkedUsersCount: '/auth/linked-users-count',
   bootstrapAdmin: '/auth/bootstrap-admin',
 } as const;

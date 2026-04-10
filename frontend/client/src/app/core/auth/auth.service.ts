@@ -119,4 +119,15 @@ export class AuthService {
       },
     });
   }
+
+  getLinkedUsersCount() {
+    // Gets the list of users linked to the current person.
+    const token = this.getToken();
+
+    return this.http.get<{ users: Array<{ username: string; email: string; role: number }> }>(`${API_BASE_URL}${API_ENDPOINTS.linkedUsersCount}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  }
 }

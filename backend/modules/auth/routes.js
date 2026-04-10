@@ -34,6 +34,19 @@ AuthRouter.post(
   bootstrapAdmin,
 );
 
+// Route: GET /auth/linked-users-count — returns the list of users linked to the current person.
+AuthRouter.get("/linked-users-count", verifyToken, async (req, res) => {
+  const personId = req.token?.personId;
+
+  try {
+    const users = await Users.find({ fk_person: personId }).select('username email role');
+    res.json({ users });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to get linked users" });
+  }
+});
+
 // Route: DELETE /auth/:id — deletes a person and all their associated users. Admin only.
 // Returns a logout flag if the deleted person matches the currently authenticated user.
 AuthRouter.delete("/delete-me", verifyToken, async (req, res) => {
